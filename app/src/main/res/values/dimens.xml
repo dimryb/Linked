@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="standard_field_width">200dp</dimen>
+    <dimen name="margin_sign_in">5dp</dimen>
+    <dimen name="margin_button_sign_in">20dp</dimen>
+</resources>

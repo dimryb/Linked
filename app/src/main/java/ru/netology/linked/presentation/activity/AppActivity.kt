@@ -54,5 +54,12 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
         }.apply {
             currentMenuProvider = this
         })
+
+        viewModel.signUpSignal.observe(this) {
+            supportFragmentManager.beginTransaction()
+                .add(R.id.main_activity, SignUpFragment())
+                .addToBackStack("SignUp")
+                .commit()
+        }
     }
 }
