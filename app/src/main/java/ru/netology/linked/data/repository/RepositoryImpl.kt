@@ -126,13 +126,13 @@ class RepositoryImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override fun authentication(authentication: Authentication) {
-        TODO("Not yet implemented")
-    }
-
-    override fun registration(login: String, password: String, name: String, file: String?) {
-        TODO("Not yet implemented")
-    }
+//    override fun authentication(authentication: Authentication) {
+//        TODO("Not yet implemented")
+//    }
+//
+//    override fun registration(login: String, password: String, name: String, file: String?) {
+//        TODO("Not yet implemented")
+//    }
 
     override fun getUser(userId: Long) {
         TODO("Not yet implemented")

@@ -46,8 +46,8 @@ interface Repository {
 
     // Users
     fun getUsers()
-    fun authentication(authentication: Authentication)
-    fun registration(login: String, password: String, name: String, file: String? = null)
+    //fun authentication(authentication: Authentication)
+    //fun registration(login: String, password: String, name: String, file: String? = null)
     fun getUser(userId: Long)
 
     // Wall
