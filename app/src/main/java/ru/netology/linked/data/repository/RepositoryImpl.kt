@@ -5,8 +5,11 @@ import ru.netology.linked.domain.dto.Authentication
 import ru.netology.linked.domain.dto.Event
 import ru.netology.linked.domain.dto.Job
 import ru.netology.linked.domain.dto.Post
+import javax.inject.Inject
 
-class RepositoryImpl : Repository{
+class RepositoryImpl @Inject constructor(
+
+) : Repository {
     override fun getEvents() {
         TODO("Not yet implemented")
     }

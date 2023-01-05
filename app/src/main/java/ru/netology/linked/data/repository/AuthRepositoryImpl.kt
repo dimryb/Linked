@@ -2,8 +2,11 @@ package ru.netology.linked.data.repository
 
 import ru.netology.linked.domain.AuthRepository
 import ru.netology.linked.domain.dto.Authentication
+import javax.inject.Inject
 
-class AuthRepositoryImpl : AuthRepository {
+class AuthRepositoryImpl @Inject constructor(
+
+) : AuthRepository {
     override suspend fun authentication(authentication: Authentication) {
         TODO("Not yet implemented")
     }
