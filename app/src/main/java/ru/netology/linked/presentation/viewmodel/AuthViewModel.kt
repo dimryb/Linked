@@ -1,31 +1,47 @@
 package ru.netology.linked.presentation.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import ru.netology.linked.R
+import ru.netology.linked.data.error.ApiError
 import ru.netology.linked.domain.AuthRepository
+import ru.netology.linked.domain.dto.Token
+import ru.netology.linked.presentation.auth.AppAuth
+import ru.netology.linked.presentation.auth.AuthState
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val repository: AuthRepository
-): ViewModel(){
-    val authorized: Boolean = false
+    private val repository: AuthRepository,
+    private val appAuth: AppAuth,
+) : ViewModel() {
+
+    val dataAuth: LiveData<AuthState> = appAuth
+        .authStateFlow
+        .asLiveData(Dispatchers.Default)
+
+    val authorized: Boolean
+        get() = appAuth.authStateFlow.value.token != null
+
+    private val _token = MutableLiveData<Token>()
+    val token: LiveData<Token>
+        get() = _token
 
     private val _signUpSignal = MutableLiveData<Unit>()
     val signUpSignal: LiveData<Unit>
         get() = _signUpSignal
 
-    private val _registerErrorSignal = MutableLiveData<RegistrationError>()
-    val registerErrorSignal: LiveData<RegistrationError>
+    private val _signInSignal = MutableLiveData<Unit>()
+    val signInSignal: LiveData<Unit>
+        get() = _signInSignal
+
+    private val _registerErrorSignal = MutableLiveData<AuthError>()
+    val registerErrorSignal: LiveData<AuthError>
         get() = _registerErrorSignal
 
     fun signIn() {
-        TODO("Not yet implemented")
+        _signInSignal.value = Unit
     }
 
     fun signUp() {
@@ -33,41 +49,41 @@ class AuthViewModel @Inject constructor(
     }
 
     fun signOut() {
-        TODO("Not yet implemented")
+        appAuth.removeAuth()
     }
 
-    enum class RegistrationError {
-        UNKNOWN,
-        PASSWORDS_DONT_MATCH,
-        NAME_IS_BLANK,
-        LOGIN_IS_BLANK,
-        PASSWORD_IS_BLANK,
+    private fun registrationError(type: AuthErrorType = AuthErrorType.UNKNOWN, message: String? = null) {
+        _registerErrorSignal.value = AuthError(type, message)
     }
 
-    private fun registrationError(error: RegistrationError = RegistrationError.UNKNOWN){
-        _registerErrorSignal.value = error
-    }
-
-    fun registration(login: String, pass: String, repeatPass: String, name: String, file: String? = null) {
-        if (name.isBlank()){
-            registrationError(RegistrationError.NAME_IS_BLANK)
+    fun registration(
+        login: String,
+        pass: String,
+        repeatPass: String,
+        name: String,
+        file: String? = null
+    ) {
+        if (name.isBlank()) {
+            registrationError(AuthErrorType.NAME_IS_BLANK)
             return
         }
-        if (login.isBlank()){
-            registrationError(RegistrationError.LOGIN_IS_BLANK)
+        if (login.isBlank()) {
+            registrationError(AuthErrorType.LOGIN_IS_BLANK)
             return
         }
-        if (pass.isBlank()){
-            registrationError(RegistrationError.PASSWORD_IS_BLANK)
+        if (pass.isBlank()) {
+            registrationError(AuthErrorType.PASSWORD_IS_BLANK)
             return
         }
         if (pass != repeatPass) {
-            registrationError(RegistrationError.PASSWORDS_DONT_MATCH)
+            registrationError(AuthErrorType.PASSWORDS_DONT_MATCH)
             return
         }
         viewModelScope.launch {
             try {
-                repository.registration(login, pass, name, file)
+                _token.value = repository.registration(login, pass, name, file)
+            } catch (e: ApiError) {
+                registrationError(AuthErrorType.API_ERROR, e.message)
             } catch (e: Exception) {
                 registrationError()
             }

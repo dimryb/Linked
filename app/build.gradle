@@ -50,7 +50,8 @@ dependencies {
     def okhttpVersion = "4.10.0"
     def retrofitVersion = "2.9.0"
     def retrofitGsonVersion = "2.9.0"
-    def okhttpLogginVersion = "4.10.0"
+    def okhttpLoggingVersion = "4.10.0"
+    def lifecycleVersion = "2.5.1"
 
     implementation "com.google.dagger:hilt-android:$hiltVersion"
     implementation "androidx.fragment:fragment-ktx:$fragmentKtxVersion"
@@ -59,7 +60,9 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitGsonVersion"
-    implementation "com.squareup.okhttp3:logging-interceptor:$okhttpLogginVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttpLoggingVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'

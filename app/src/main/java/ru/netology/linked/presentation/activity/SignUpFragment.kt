@@ -11,6 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.linked.R
 import ru.netology.linked.databinding.FragmentSignUpBinding
 import ru.netology.linked.presentation.viewmodel.AuthViewModel
+import ru.netology.linked.presentation.viewmodel.AuthErrorType
 
 @AndroidEntryPoint
 class SignUpFragment : Fragment() {
@@ -47,14 +48,15 @@ class SignUpFragment : Fragment() {
 
     private fun observeViewModel() {
         viewModel.registerErrorSignal.observe(viewLifecycleOwner) { error ->
-            val toastMessage: String = when (error) {
-                AuthViewModel.RegistrationError.UNKNOWN -> getString(R.string.register_error)
-                AuthViewModel.RegistrationError.PASSWORDS_DONT_MATCH -> getString(R.string.passwords_dont_match)
-                AuthViewModel.RegistrationError.NAME_IS_BLANK -> getString(R.string.name_is_blank)
-                AuthViewModel.RegistrationError.LOGIN_IS_BLANK -> getString(R.string.login_is_blank)
-                AuthViewModel.RegistrationError.PASSWORD_IS_BLANK -> getString(R.string.password_is_blank)
+            val toastMessage: String = when (error.type) {
+                AuthErrorType.UNKNOWN -> getString(R.string.register_error)
+                AuthErrorType.PASSWORDS_DONT_MATCH -> getString(R.string.passwords_dont_match)
+                AuthErrorType.NAME_IS_BLANK -> getString(R.string.name_is_blank)
+                AuthErrorType.LOGIN_IS_BLANK -> getString(R.string.login_is_blank)
+                AuthErrorType.PASSWORD_IS_BLANK -> getString(R.string.password_is_blank)
+                AuthErrorType.API_ERROR -> getString(R.string.api_error)
                 else -> getString(R.string.register_error)
-            }
+            } + if (error.message == null) "" else ": " + error.message
             Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show()
         }
     }

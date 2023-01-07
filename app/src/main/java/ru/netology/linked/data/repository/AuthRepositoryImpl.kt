@@ -27,14 +27,16 @@ class AuthRepositoryImpl @Inject constructor(
         val response: Response<Token>
         try {
             response = apiService.registration(login, password, name)
+            if (!response.isSuccessful) {
+                throw ApiError(response.code(), response.message())
+            }
+            return response.body() ?: throw ApiError(response.code(), response.message())
         } catch (e: IOException) {
             throw NetworkError
+        }catch (e: ApiError){
+            throw e
         } catch (e: Exception) {
             throw UnknownError
         }
-        if (!response.isSuccessful) {
-            throw ApiError(response.code(), response.message())
-        }
-        return response.body() ?: throw ApiError(response.code(), response.message())
     }
 }
