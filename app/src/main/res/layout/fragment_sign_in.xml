@@ -19,20 +19,11 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <EditText
-            android:id="@+id/field_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_sign_in"
-            android:layout_marginStart="@dimen/margin_sign_in"
-            android:hint="@string/enter_name"
-            android:inputType="text" />
-
-        <EditText
             android:id="@+id/field_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_sign_in"
-            android:layout_marginStart="@dimen/margin_sign_in"
+            android:layout_marginBottom="5dp"
+            android:layout_marginStart="5dp"
             android:hint="@string/enter_login"
             android:inputType="text" />
 
@@ -40,28 +31,19 @@
             android:id="@+id/field_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_sign_in"
-            android:layout_marginStart="@dimen/margin_sign_in"
+            android:layout_marginBottom="5dp"
+            android:layout_marginStart="5dp"
             android:hint="@string/enter_password"
             android:inputType="textPassword" />
 
-        <EditText
-            android:id="@+id/field_repeat_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_sign_in"
-            android:layout_marginStart="@dimen/margin_sign_in"
-            android:hint="@string/enter_repeat_password"
-            android:inputType="textPassword" />
-
         <Button
-            android:id="@+id/sign_up_button"
+            android:id="@+id/sign_in_button"
             android:layout_width="@dimen/standard_field_width"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/margin_button_sign_in"
-            android:text="@string/label_sign_up" />
+            android:layout_marginTop="20dp"
+            android:text="@string/label_sign_in" />
 
     </LinearLayout>
 

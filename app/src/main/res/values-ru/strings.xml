@@ -15,4 +15,5 @@
     <string name="login_is_blank">Отсутствует логин</string>
     <string name="password_is_blank">Отсутствует пароль</string>
     <string name="api_error">Ошибка API</string>
+    <string name="label_sign_in">Войти</string>
 </resources>
