@@ -14,8 +14,20 @@ import javax.inject.Inject
 class AuthRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
 ) : AuthRepository {
-    override suspend fun authentication(authentication: Authentication) {
-        TODO("Not yet implemented")
+    override suspend fun authentication(authentication: Authentication): Token {
+        try {
+            val response = apiService.authentication(authentication)
+            if (!response.isSuccessful) {
+                throw ApiError(response.code(), response.message())
+            }
+            return response.body() ?: throw ApiError(response.code(), response.message())
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: ApiError) {
+            throw e
+        } catch (e: Exception) {
+            throw UnknownError
+        }
     }
 
     override suspend fun registration(
@@ -33,7 +45,7 @@ class AuthRepositoryImpl @Inject constructor(
             return response.body() ?: throw ApiError(response.code(), response.message())
         } catch (e: IOException) {
             throw NetworkError
-        }catch (e: ApiError){
+        } catch (e: ApiError) {
             throw e
         } catch (e: Exception) {
             throw UnknownError

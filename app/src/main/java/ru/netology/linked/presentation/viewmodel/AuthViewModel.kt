@@ -6,6 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.netology.linked.data.error.ApiError
 import ru.netology.linked.domain.AuthRepository
+import ru.netology.linked.domain.dto.Authentication
 import ru.netology.linked.domain.dto.Token
 import ru.netology.linked.presentation.auth.AppAuth
 import ru.netology.linked.presentation.auth.AuthState
@@ -27,6 +28,10 @@ class AuthViewModel @Inject constructor(
     private val _token = MutableLiveData<Token>()
     val token: LiveData<Token>
         get() = _token
+
+    private val _loginError = MutableLiveData<Unit>()
+    val loginError: LiveData<Unit>
+        get() = _loginError
 
     private val _signUpSignal = MutableLiveData<Unit>()
     val signUpSignal: LiveData<Unit>
@@ -90,4 +95,13 @@ class AuthViewModel @Inject constructor(
         }
     }
 
+    fun authentication(login: String, pass: String){
+        viewModelScope.launch {
+            try {
+                _token.value = repository.authentication(Authentication(login, pass))
+            } catch (e: Exception) {
+                _loginError.value = Unit
+            }
+        }
+    }
 }

@@ -74,5 +74,12 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
                 .addToBackStack("SignUp")
                 .commit()
         }
+
+        viewModel.signInSignal.observe(this) {
+            supportFragmentManager.beginTransaction()
+                .add(R.id.main_activity, SignInFragment())
+                .addToBackStack("SignIn")
+                .commit()
+        }
     }
 }
