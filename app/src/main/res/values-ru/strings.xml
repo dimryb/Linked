@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Linked</string>
+    <string name="logout">Выйти</string>
+    <string name="sign_in">Войти</string>
+    <string name="sign_up">Регистрация</string>
+    <string name="label_sign_up">Регистрация</string>
+    <string name="enter_repeat_password">Подтвердите пароль</string>
+    <string name="enter_password">Введите пароль</string>
+    <string name="enter_login">Введите логин</string>
+    <string name="enter_name">Введите имя</string>
+    <string name="register_error">Ошибка регистрации</string>
+    <string name="passwords_dont_match">Пароли не совпадают</string>
+    <string name="name_is_blank">Отсутствует имя</string>
+    <string name="login_is_blank">Отсутствует логин</string>
+    <string name="password_is_blank">Отсутствует пароль</string>
+    <string name="api_error">Ошибка API</string>
+    <string name="label_sign_in">Войти</string>
+    <string name="login_error">Ошибка входа</string>
+</resources>

@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">Linked</string>
+    <string name="logout">Log Out</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="label_sign_up">Sign Up</string>
+    <string name="enter_repeat_password">Repeat password</string>
+    <string name="enter_password">Enter pasword</string>
+    <string name="enter_login">Enter login</string>
+    <string name="enter_name">Enter name</string>
+    <string name="register_error">Register error</string>
+    <string name="passwords_dont_match">Passwords don\'t match</string>
+    <string name="name_is_blank">Name is blank</string>
+    <string name="login_is_blank">Login is blank</string>
+    <string name="password_is_blank">Password is blank</string>
+    <string name="api_error">API error</string>
+    <string name="label_sign_in">Sign In</string>
+    <string name="login_error">Login error</string>
 </resources>
