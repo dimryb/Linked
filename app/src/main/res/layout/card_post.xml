@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/postLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/avatarImageView"
@@ -82,6 +82,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/headerTitleBarrier"
+        app:layout_constraintBottom_toTopOf="@id/bottomBarrier"
         tools:text="@sample/posts.json/data/content" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/bottomBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="postTextView"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="347dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
