@@ -16,4 +16,6 @@
     <string name="api_error">API error</string>
     <string name="label_sign_in">Sign In</string>
     <string name="login_error">Login error</string>
+    <string name="description_post_author_avatar">Author avatar</string>
+    <string name="description_menu">Menu</string>
 </resources>

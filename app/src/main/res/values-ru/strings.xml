@@ -17,4 +17,6 @@
     <string name="api_error">Ошибка API</string>
     <string name="label_sign_in">Войти</string>
     <string name="login_error">Ошибка входа</string>
+    <string name="description_post_author_avatar">Аватар автора</string>
+    <string name="description_menu">Меню</string>
 </resources>
