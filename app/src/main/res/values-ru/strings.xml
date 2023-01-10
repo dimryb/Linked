@@ -19,4 +19,8 @@
     <string name="login_error">Ошибка входа</string>
     <string name="description_post_author_avatar">Аватар автора</string>
     <string name="description_menu">Меню</string>
+    <string name="there_are_posts">Есть посты</string>
+    <string name="error_loading">Что-то пошло не так. Попробуйте позднее</string>
+    <string name="retry_loading">Повторить</string>
+    <string name="empty_posts">Постов нет.\\nЕсли создадите новый пост, то он появится здесь</string>
 </resources>
