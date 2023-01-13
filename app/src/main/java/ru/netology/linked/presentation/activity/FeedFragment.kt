@@ -5,15 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
+import androidx.fragment.app.activityViewModels
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.linked.databinding.FragmentFeedBinding
-import ru.netology.linked.domain.dto.*
+import ru.netology.linked.domain.dto.Post
+import ru.netology.linked.domain.dto.UserPreview
+import ru.netology.linked.domain.dto.Users
 import ru.netology.linked.presentation.adapter.FeedAdapter
 import ru.netology.linked.presentation.viewholder.OnInteractionListener
+import ru.netology.linked.presentation.viewmodel.MainViewModel
 
 @AndroidEntryPoint
 class FeedFragment : Fragment() {
+
+    private val viewModel: MainViewModel by activityViewModels()
 
     private var _binding: FragmentFeedBinding? = null
     private val binding: FragmentFeedBinding
@@ -81,7 +86,15 @@ class FeedFragment : Fragment() {
             ),
         )
 
-        adapter.submitList(posts)
+        viewModel.data.observe(viewLifecycleOwner){ feedModel ->
+            adapter.submitList(feedModel.posts)
+        }
+
+    }
+
+    override fun onStart() {
+        viewModel.getPosts()
+        super.onStart()
     }
 
     override fun onDestroy() {

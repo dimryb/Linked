@@ -1,5 +1,9 @@
 package ru.netology.linked.data.repository
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import ru.netology.linked.data.api.ApiService
+import ru.netology.linked.data.error.ApiError
 import ru.netology.linked.domain.Repository
 import ru.netology.linked.domain.dto.Authentication
 import ru.netology.linked.domain.dto.Event
@@ -8,8 +12,13 @@ import ru.netology.linked.domain.dto.Post
 import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(
-
+    private val apiService: ApiService,
 ) : Repository {
+
+    private val _data = MutableSharedFlow<List<Post>>(replay = 1)
+    override val data: Flow<List<Post>>
+        get() = _data
+
     override fun getEvents() {
         TODO("Not yet implemented")
     }
@@ -86,8 +95,13 @@ class RepositoryImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override fun getPosts() {
-        TODO("Not yet implemented")
+    override suspend fun getPosts() {
+        val response = apiService.getPosts()
+        if (!response.isSuccessful) {
+            throw ApiError(response.code(), response.message())
+        }
+        val body = response.body() ?: throw ApiError(response.code(), response.message())
+        _data.tryEmit(body)
     }
 
     override fun setPost(post: Post) {
