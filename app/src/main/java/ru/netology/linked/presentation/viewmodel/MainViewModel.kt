@@ -30,4 +30,12 @@ class MainViewModel @Inject constructor(
             }
         }
     }
+
+    fun savePost() {
+        TODO("Not yet implemented")
+    }
+
+    fun editContent(toString: String) {
+
+    }
 }
