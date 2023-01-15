@@ -13,6 +13,7 @@ import ru.netology.linked.databinding.FragmentFeedBinding
 import ru.netology.linked.domain.dto.Post
 import ru.netology.linked.domain.dto.UserPreview
 import ru.netology.linked.domain.dto.Users
+import ru.netology.linked.presentation.activity.NewPostFragment.Companion.textArg
 import ru.netology.linked.presentation.adapter.FeedAdapter
 import ru.netology.linked.presentation.viewholder.OnInteractionListener
 import ru.netology.linked.presentation.viewmodel.AuthViewModel
@@ -40,6 +41,14 @@ class FeedFragment : Fragment() {
         override fun onDetails(post: Post) {
 
         }
+
+        override fun onEdit(post: Post) {
+            viewModel.edit(post)
+        }
+
+        override fun onRemove(post: Post) {
+            TODO("Not yet implemented")
+        }
     })
 
     override fun onCreateView(
@@ -64,6 +73,13 @@ class FeedFragment : Fragment() {
         viewModel.data.observe(viewLifecycleOwner){ feedModel ->
             adapter.submitList(feedModel.posts)
         }
+
+        viewModel.edited.observe(viewLifecycleOwner) { edited ->
+            if (edited.id == 0L) {
+                return@observe
+            }
+            launchEditPost()
+        }
     }
 
     private fun setupListeners() {
@@ -79,5 +95,17 @@ class FeedFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    private fun launchEditPost() {
+        findNavController()
+            .navigate(
+                R.id.action_feedFragment_to_newPostFragment,
+                Bundle().apply {
+                    viewModel.edited.value?.content.let {
+                        textArg = it
+                    }
+                }
+            )
     }
 }

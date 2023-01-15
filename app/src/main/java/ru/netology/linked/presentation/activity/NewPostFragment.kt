@@ -51,6 +51,8 @@ class NewPostFragment : Fragment() {
             false
         )
 
+        arguments?.textArg?.let(binding.contentEditText::setText)
+
         setupClickListeners()
         observeViewModel()
 
@@ -72,5 +74,12 @@ class NewPostFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    companion object {
+        private const val TEXT_KEY = "TEXT_KEY"
+        var Bundle.textArg: String?
+            set(value) = putString(TEXT_KEY, value)
+            get() = getString(TEXT_KEY)
     }
 }
