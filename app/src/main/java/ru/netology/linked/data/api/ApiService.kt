@@ -11,6 +11,9 @@ interface ApiService {
     @GET("posts")
     suspend fun getPosts(): Response<List<Post>>
 
+    @POST("posts")
+    suspend fun setPost(@Body post: Post): Response<Post>
+
     @FormUrlEncoded
     @POST("users/registration/")
     suspend fun registration(
@@ -22,4 +25,7 @@ interface ApiService {
 
     @POST("users/authentication/")
     suspend fun authentication(@Body authentication: Authentication): Response<Token>
+
+
+
 }

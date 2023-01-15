@@ -76,11 +76,6 @@ class FeedFragment : Fragment() {
         }
     }
 
-    override fun onStart() {
-        viewModel.getPosts()
-        super.onStart()
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         _binding = null

@@ -5,6 +5,7 @@ import android.view.*
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.linked.R
 import ru.netology.linked.databinding.FragmentNewPostBinding
@@ -57,6 +58,10 @@ class NewPostFragment : Fragment() {
     }
 
     private fun observeViewModel() {
+        viewModel.postCreated.observe(viewLifecycleOwner) {
+            findNavController().navigateUp()
+        }
+
 
     }
 

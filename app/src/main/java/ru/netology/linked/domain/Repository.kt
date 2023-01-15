@@ -39,7 +39,7 @@ interface Repository {
 
     // Posts
     suspend fun getPosts()
-    fun setPost(post: Post)
+    suspend fun setPost(post: Post)
     fun getPostsLatest(count: Int)
     fun getPost(postId: Long)
     fun removePost(postId: Long)
