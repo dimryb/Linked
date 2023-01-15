@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace 'ru.netology.linked'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "ru.netology.linked"
         minSdk 23
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -52,6 +52,11 @@ dependencies {
     def retrofitGsonVersion = "2.9.0"
     def okhttpLoggingVersion = "4.10.0"
     def lifecycleVersion = "2.5.1"
+    def swipeRefreshLayoutVersion = "1.1.0"
+    def roomVersion = "2.5.0"
+    def roomPagingVersion = roomVersion
+    def roomRuntimeVersion = roomVersion
+    def pagingVersion = "3.1.1"
 
     implementation "com.google.dagger:hilt-android:$hiltVersion"
     implementation "androidx.fragment:fragment-ktx:$fragmentKtxVersion"
@@ -63,6 +68,11 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttpLoggingVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swipeRefreshLayoutVersion"
+    implementation "androidx.room:room-paging:$roomPagingVersion"
+    implementation "androidx.room:room-runtime:$roomRuntimeVersion"
+    implementation "androidx.room:room-ktx:$roomVersion"
+    implementation "androidx.paging:paging-runtime-ktx:$pagingVersion"
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'
@@ -72,5 +82,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
 
+    kapt "androidx.room:room-compiler:$roomVersion"
     kapt "com.google.dagger:hilt-compiler:$hiltVersion"
 }

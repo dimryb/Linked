@@ -16,4 +16,13 @@
     <string name="api_error">API error</string>
     <string name="label_sign_in">Sign In</string>
     <string name="login_error">Login error</string>
+    <string name="description_post_author_avatar">Author avatar</string>
+    <string name="description_menu">Menu</string>
+    <string name="there_are_posts">There are posts</string>
+    <string name="error_loading">Something went wrong. Try again later</string>
+    <string name="retry_loading">Retry</string>
+    <string name="empty_posts">There are no posts.\nIf you create a new post, it will appear here</string>
+    <string name="save">Save</string>
+    <string name="option_menu_remove">Remove</string>
+    <string name="option_menu_edit">Edit</string>
 </resources>

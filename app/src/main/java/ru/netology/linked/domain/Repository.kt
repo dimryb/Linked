@@ -1,11 +1,15 @@
 package ru.netology.linked.domain
 
+import kotlinx.coroutines.flow.Flow
 import ru.netology.linked.domain.dto.Authentication
 import ru.netology.linked.domain.dto.Event
 import ru.netology.linked.domain.dto.Job
 import ru.netology.linked.domain.dto.Post
 
 interface Repository {
+
+    val data: Flow<List<Post>>
+
     // Events
     fun getEvents()
     fun setEvent(event: Event)
@@ -34,8 +38,8 @@ interface Repository {
     fun getMyWallNewer(postId: Long)
 
     // Posts
-    fun getPosts()
-    fun setPost(post: Post)
+    suspend fun getPosts()
+    suspend fun setPost(post: Post)
     fun getPostsLatest(count: Int)
     fun getPost(postId: Long)
     fun removePost(postId: Long)
