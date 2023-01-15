@@ -1,27 +1,29 @@
 package ru.netology.linked.data.repository
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import ru.netology.linked.data.api.ApiService
+import ru.netology.linked.data.dao.PostDao
+import ru.netology.linked.data.entity.PostEntity
+import ru.netology.linked.data.entity.toDto
+import ru.netology.linked.data.entity.toEntity
 import ru.netology.linked.data.error.ApiError
 import ru.netology.linked.data.error.NetworkError
 import ru.netology.linked.domain.Repository
-import ru.netology.linked.domain.dto.Authentication
 import ru.netology.linked.domain.dto.Event
 import ru.netology.linked.domain.dto.Job
 import ru.netology.linked.domain.dto.Post
 import java.io.IOException
 import javax.inject.Inject
-import ru.netology.linked.data.error.AppError
 import ru.netology.linked.data.error.UnknownError
 
 class RepositoryImpl @Inject constructor(
+    private val postDao: PostDao,
     private val apiService: ApiService,
 ) : Repository {
 
-    private val _data = MutableSharedFlow<List<Post>>(replay = 1)
-    override val data: Flow<List<Post>>
-        get() = _data
+    override val data = postDao.getPosts().map(List<PostEntity>::toDto).flowOn(Dispatchers.Default)
 
     override fun getEvents() {
         TODO("Not yet implemented")
@@ -106,7 +108,7 @@ class RepositoryImpl @Inject constructor(
                 throw ApiError(response.code(), response.message())
             }
             val body = response.body() ?: throw ApiError(response.code(), response.message())
-            _data.tryEmit(body)
+            postDao.insertPosts(body.toEntity())
         } catch (e: IOException) {
             throw NetworkError
         } catch (e: Exception) {
@@ -121,8 +123,7 @@ class RepositoryImpl @Inject constructor(
                 throw ApiError(response.code(), response.message())
             }
             val body = response.body() ?: throw ApiError(response.code(), response.message())
-            // записать в dao
-            getPosts() // Временно
+            postDao.insertPost(PostEntity.fromDto(body))
         }catch (e: IOException) {
             throw NetworkError
         } catch (e: Exception) {
