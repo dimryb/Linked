@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.netology.linked.R
 import ru.netology.linked.databinding.CardPostBinding
 import ru.netology.linked.domain.dto.Post
+import ru.netology.linked.presentation.view.loadAuthorAvatar
+import ru.netology.linked.presentation.view.loadImageMedia
 
 class FeedViewHolder(
     private val binding: CardPostBinding,
@@ -23,8 +25,12 @@ class FeedViewHolder(
             publishedTextView.text = post.published
             postTextView.text = post.content
 
-            //avatarImageView
-
+            post.authorAvatar?.let { }
+            if (post.authorAvatar != null) {
+                avatarImageView.loadAuthorAvatar(post.authorAvatar)
+            }else {
+                avatarImageView.setImageResource(R.drawable.posts_avatars)
+            }
             menuButton.visibility = if (post.ownedByMe) View.VISIBLE else View.GONE
         }
     }
