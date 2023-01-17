@@ -25,79 +25,79 @@ class RepositoryImpl @Inject constructor(
 
     override val data = postDao.getPosts().map(List<PostEntity>::toDto).flowOn(Dispatchers.Default)
 
-    override fun getEvents() {
+    override suspend fun getEvents() {
         TODO("Not yet implemented")
     }
 
-    override fun setEvent(event: Event) {
+    override suspend fun setEvent(event: Event) {
         TODO("Not yet implemented")
     }
 
-    override fun getEventsLatest(count: Int) {
+    override suspend fun getEventsLatest(count: Int) {
         TODO("Not yet implemented")
     }
 
-    override fun getEvent(eventId: Long) {
+    override suspend fun getEvent(eventId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun removeEvent(eventId: Long) {
+    override suspend fun removeEvent(eventId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun getEventsAfter(count: Int, eventId: Long) {
+    override suspend fun getEventsAfter(count: Int, eventId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun getEventsBefore(count: Int, eventId: Long) {
+    override suspend fun getEventsBefore(count: Int, eventId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun likeEvent(eventId: Long) {
+    override suspend fun likeEvent(eventId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun getEventsNewer(eventId: Long) {
+    override suspend fun getEventsNewer(eventId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun getEventParticipants(eventId: Long) {
+    override suspend fun getEventParticipants(eventId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun saveMedia(file: String) {
+    override suspend fun saveMedia(file: String) {
         TODO("Not yet implemented")
     }
 
-    override fun getJobs() {
+    override suspend fun getJobs() {
         TODO("Not yet implemented")
     }
 
-    override fun setJob(job: Job) {
+    override suspend fun setJob(job: Job) {
         TODO("Not yet implemented")
     }
 
-    override fun removeJob(jobId: Long) {
+    override suspend fun removeJob(jobId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun getMyWall() {
+    override suspend fun getMyWall() {
         TODO("Not yet implemented")
     }
 
-    override fun getMyWallLatest(count: Int) {
+    override suspend fun getMyWallLatest(count: Int) {
         TODO("Not yet implemented")
     }
 
-    override fun getMyWallAfter(count: Int, postId: Long) {
+    override suspend fun getMyWallAfter(count: Int, postId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun getMyWallBefore(count: Int, postId: Long) {
+    override suspend fun getMyWallBefore(count: Int, postId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun getMyWallNewer(postId: Long) {
+    override suspend fun getMyWallNewer(postId: Long) {
         TODO("Not yet implemented")
     }
 
@@ -169,39 +169,31 @@ class RepositoryImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override fun getUsers() {
+    override suspend fun getUsers() {
         TODO("Not yet implemented")
     }
 
-//    override fun authentication(authentication: Authentication) {
-//        TODO("Not yet implemented")
-//    }
-//
-//    override fun registration(login: String, password: String, name: String, file: String?) {
-//        TODO("Not yet implemented")
-//    }
-
-    override fun getUser(userId: Long) {
+    override suspend  fun getUser(userId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun getWall(authorId: Long) {
+    override suspend fun getWall(authorId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun getWallLatest(authorId: Long, count: Int) {
+    override suspend fun getWallLatest(authorId: Long, count: Int) {
         TODO("Not yet implemented")
     }
 
-    override fun getWallAfter(authorId: Long, count: Int, postId: Long) {
+    override suspend fun getWallAfter(authorId: Long, count: Int, postId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun getWallBefore(authorId: Long, count: Int, postId: Long) {
+    override suspend fun getWallBefore(authorId: Long, count: Int, postId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun getWallNewer(authorId: Long, postId: Long) {
+    override suspend  fun getWallNewer(authorId: Long, postId: Long) {
         TODO("Not yet implemented")
     }
 }

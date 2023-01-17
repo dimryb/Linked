@@ -25,10 +25,9 @@ class FeedViewHolder(
             publishedTextView.text = post.published
             postTextView.text = post.content
 
-            post.authorAvatar?.let { }
             if (post.authorAvatar != null) {
                 avatarImageView.loadAuthorAvatar(post.authorAvatar)
-            }else {
+            } else {
                 avatarImageView.setImageResource(R.drawable.posts_avatars)
             }
             menuButton.visibility = if (post.ownedByMe) View.VISIBLE else View.GONE
