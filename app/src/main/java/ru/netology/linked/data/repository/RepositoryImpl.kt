@@ -131,31 +131,41 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getPostsLatest(count: Int) {
+    override suspend fun getPostsLatest(count: Int) {
         TODO("Not yet implemented")
     }
 
-    override fun getPost(postId: Long) {
+    override suspend fun getPost(postId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun removePost(postId: Long) {
+    override suspend fun removePost(postId: Long) {
+        try {
+            val response = apiService.removePost(postId)
+            if (!response.isSuccessful) {
+                throw ApiError(response.code(), response.message())
+            }
+            postDao.removePost(postId)
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
+    }
+
+    override suspend fun getPostsAfter(count: Int, postId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun getPostsAfter(count: Int, postId: Long) {
+    override suspend fun getPostsBefore(count: Int, postId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun getPostsBefore(count: Int, postId: Long) {
+    override suspend fun likePost(postId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun likePost(postId: Long) {
-        TODO("Not yet implemented")
-    }
-
-    override fun getPostsNewer(postId: Long) {
+    override suspend fun getPostsNewer(postId: Long) {
         TODO("Not yet implemented")
     }
 

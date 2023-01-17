@@ -11,8 +11,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.linked.R
 import ru.netology.linked.databinding.FragmentFeedBinding
 import ru.netology.linked.domain.dto.Post
-import ru.netology.linked.domain.dto.UserPreview
-import ru.netology.linked.domain.dto.Users
 import ru.netology.linked.presentation.activity.NewPostFragment.Companion.textArg
 import ru.netology.linked.presentation.adapter.FeedAdapter
 import ru.netology.linked.presentation.viewholder.OnInteractionListener
@@ -43,11 +41,11 @@ class FeedFragment : Fragment() {
         }
 
         override fun onEdit(post: Post) {
-            viewModel.edit(post)
+            viewModel.editPost(post)
         }
 
         override fun onRemove(post: Post) {
-            TODO("Not yet implemented")
+            viewModel.removePostById(post.id)
         }
     })
 

@@ -14,6 +14,9 @@ interface ApiService {
     @POST("posts")
     suspend fun setPost(@Body post: Post): Response<Post>
 
+    @DELETE("posts/{id}")
+    suspend fun removePost(@Path("id") id: Long): Response<Unit>
+
     @FormUrlEncoded
     @POST("users/registration/")
     suspend fun registration(
@@ -25,7 +28,6 @@ interface ApiService {
 
     @POST("users/authentication/")
     suspend fun authentication(@Body authentication: Authentication): Response<Token>
-
 
 
 }

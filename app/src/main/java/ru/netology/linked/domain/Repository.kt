@@ -40,13 +40,13 @@ interface Repository {
     // Posts
     suspend fun getPosts()
     suspend fun setPost(post: Post)
-    fun getPostsLatest(count: Int)
-    fun getPost(postId: Long)
-    fun removePost(postId: Long)
-    fun getPostsAfter(count: Int, postId: Long)
-    fun getPostsBefore(count: Int, postId: Long)
-    fun likePost(postId: Long)
-    fun getPostsNewer(postId: Long)
+    suspend fun getPostsLatest(count: Int)
+    suspend fun getPost(postId: Long)
+    suspend fun removePost(postId: Long)
+    suspend fun getPostsAfter(count: Int, postId: Long)
+    suspend fun getPostsBefore(count: Int, postId: Long)
+    suspend fun likePost(postId: Long)
+    suspend fun getPostsNewer(postId: Long)
 
     // Users
     fun getUsers()

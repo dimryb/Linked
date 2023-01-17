@@ -6,7 +6,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.netology.linked.domain.Repository
-import ru.netology.linked.domain.dto.Attachment
 import ru.netology.linked.domain.dto.Post
 import ru.netology.linked.domain.dto.UserPreview
 import ru.netology.linked.domain.dto.Users
@@ -75,7 +74,7 @@ class MainViewModel @Inject constructor(
         edited.value = empty
     }
 
-    fun edit(post: Post) {
+    fun editPost(post: Post) {
         edited.value = post
     }
 
@@ -87,6 +86,15 @@ class MainViewModel @Inject constructor(
                 return
             }
             edited.value = it.copy(content = text)
+        }
+    }
+
+    fun removePostById(postId: Long) {
+        viewModelScope.launch {
+            try {
+                repository.removePost(postId)
+            } catch (e: Exception) {
+            }
         }
     }
 }
