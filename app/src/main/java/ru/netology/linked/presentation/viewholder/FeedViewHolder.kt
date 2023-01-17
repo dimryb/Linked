@@ -24,6 +24,8 @@ class FeedViewHolder(
             postTextView.text = post.content
 
             //avatarImageView
+
+            menuButton.visibility = if (post.ownedByMe) View.VISIBLE else View.GONE
         }
     }
 
