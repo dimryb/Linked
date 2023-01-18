@@ -93,7 +93,21 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 repository.removePost(postId)
+                _state.value = FeedModelState.Idle
             } catch (e: Exception) {
+                _state.value = FeedModelState.Error
+            }
+        }
+    }
+
+    fun refresh() {
+        viewModelScope.launch {
+            _state.value = FeedModelState.Refresh
+            try {
+                repository.getPosts()
+                _state.value = FeedModelState.Idle
+            } catch (e: Exception) {
+                _state.value = FeedModelState.Error
             }
         }
     }

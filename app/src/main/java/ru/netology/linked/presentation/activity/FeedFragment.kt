@@ -4,15 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.linked.R
 import ru.netology.linked.databinding.FragmentFeedBinding
 import ru.netology.linked.domain.dto.Post
 import ru.netology.linked.presentation.activity.NewPostFragment.Companion.textArg
 import ru.netology.linked.presentation.adapter.FeedAdapter
+import ru.netology.linked.presentation.model.FeedModelState
 import ru.netology.linked.presentation.viewholder.OnInteractionListener
 import ru.netology.linked.presentation.viewmodel.AuthViewModel
 import ru.netology.linked.presentation.viewmodel.MainViewModel
@@ -68,7 +71,7 @@ class FeedFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.data.observe(viewLifecycleOwner){ feedModel ->
+        viewModel.data.observe(viewLifecycleOwner) { feedModel ->
             adapter.submitList(feedModel.posts)
         }
 
@@ -77,6 +80,17 @@ class FeedFragment : Fragment() {
                 return@observe
             }
             launchEditPost()
+        }
+
+        viewModel.state.observe(viewLifecycleOwner) { state ->
+            binding.progress.isVisible = state is FeedModelState.Loading
+            if (state is FeedModelState.Error) {
+                Snackbar.make(binding.root, "Error", Snackbar.LENGTH_LONG)
+                    .setAction(R.string.retry_loading) {
+                        viewModel.refresh()
+                    }.show()
+            }
+            binding.swipeRefresh.isRefreshing = state is FeedModelState.Refresh
         }
     }
 
@@ -87,6 +101,9 @@ class FeedFragment : Fragment() {
             } else {
                 authViewModel.signIn()
             }
+        }
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.refresh()
         }
     }
 
