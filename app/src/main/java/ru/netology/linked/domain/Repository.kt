@@ -1,14 +1,12 @@
 package ru.netology.linked.domain
 
+import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
-import ru.netology.linked.domain.dto.Authentication
-import ru.netology.linked.domain.dto.Event
-import ru.netology.linked.domain.dto.Job
-import ru.netology.linked.domain.dto.Post
+import ru.netology.linked.domain.dto.*
 
 interface Repository {
 
-    val data: Flow<List<Post>>
+    val data: Flow<PagingData<FeedItem>>
 
     // Events
     suspend fun getEvents()

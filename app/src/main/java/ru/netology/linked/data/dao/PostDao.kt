@@ -1,5 +1,6 @@
 package ru.netology.linked.data.dao
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.Companion.REPLACE
@@ -11,6 +12,9 @@ import ru.netology.linked.data.entity.PostEntity
 interface PostDao {
     @Query("SELECT * FROM PostEntity ORDER BY id DESC")
     fun getPosts(): Flow<List<PostEntity>>
+
+    @Query("SELECT * FROM PostEntity ORDER BY id DESC")
+    fun getPostsPagingSource(): PagingSource<Int, PostEntity>
 
     @Insert(onConflict = REPLACE)
     suspend fun insertPost(post: PostEntity)

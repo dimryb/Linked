@@ -1,5 +1,9 @@
 package ru.netology.linked.domain.dto
 
+//data class TimingSeparator(
+//    override val id: Long,
+//) : FeedItem()
+
 data class Post(
     override val id: Long,
     val authorId: Long,

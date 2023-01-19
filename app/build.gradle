@@ -58,6 +58,7 @@ dependencies {
     def roomRuntimeVersion = roomVersion
     def pagingVersion = "3.1.1"
     def glideVersion = "4.13.2"
+    def paging_version = "3.1.1"
 
     implementation "com.google.dagger:hilt-android:$hiltVersion"
     implementation "androidx.fragment:fragment-ktx:$fragmentKtxVersion"
@@ -75,6 +76,7 @@ dependencies {
     implementation "androidx.room:room-ktx:$roomVersion"
     implementation "androidx.paging:paging-runtime-ktx:$pagingVersion"
     implementation "com.github.bumptech.glide:glide:$glideVersion"
+    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'

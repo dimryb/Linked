@@ -1,6 +1,7 @@
 package ru.netology.linked.presentation.viewmodel
 
 import androidx.lifecycle.*
+import androidx.paging.PagingData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
@@ -13,6 +14,12 @@ import ru.netology.linked.presentation.model.FeedModel
 import ru.netology.linked.presentation.model.FeedModelState
 import ru.netology.linked.presentation.util.SingleLiveEvent
 import javax.inject.Inject
+import androidx.paging.cachedIn
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
+import ru.netology.linked.domain.dto.FeedItem
+import ru.netology.linked.presentation.auth.AppAuth
 
 private val empty = Post(
     id = 0,
@@ -30,11 +37,16 @@ private val empty = Post(
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val repository: Repository,
+    private val appAuth: AppAuth,
 ) : ViewModel() {
 
-    val data: LiveData<FeedModel> = repository.data.map { films ->
-        FeedModel(films, films.isEmpty())
-    }.asLiveData(Dispatchers.Default)
+    private val cached = repository
+        .data
+        .cachedIn(viewModelScope)
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val data: Flow<PagingData<FeedItem>> = appAuth.authStateFlow
+        .flatMapLatest { cached }
 
     private val _state = MutableLiveData<FeedModelState>()
     val state: LiveData<FeedModelState>
@@ -51,10 +63,12 @@ class MainViewModel @Inject constructor(
 
     fun getPosts() {
         viewModelScope.launch {
+            _postCreated.value = Unit
             try {
                 repository.getPosts()
+                _state.value = FeedModelState.Idle
             } catch (e: Exception) {
-                TODO("getPosts Exception")
+                _state.value = FeedModelState.Error
             }
         }
     }

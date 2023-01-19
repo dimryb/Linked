@@ -101,14 +101,14 @@ interface ApiService {
 
     @GET("posts/{post_id}/after/")
     suspend fun getPostsAfter(
+        @Path("post_id") postId: Long,
         @Query("count") count: Int,
-        @Path("post_id") postId: Long
     ): Response<List<Post>>
 
     @GET("posts/{post_id}/before/")
     suspend fun getPostsBefore(
+        @Path("post_id") postId: Long,
         @Query("count") count: Int,
-        @Path("post_id") postId: Long
     ): Response<List<Post>>
 
     @POST("posts/{post_id}/likes/")

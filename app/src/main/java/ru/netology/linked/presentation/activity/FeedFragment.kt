@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import ru.netology.linked.R
 import ru.netology.linked.databinding.FragmentFeedBinding
 import ru.netology.linked.domain.dto.Post
@@ -31,6 +33,7 @@ class FeedFragment : Fragment() {
         get() = _binding ?: throw RuntimeException("FragmentFeedBinding == null!")
 
     private val adapter = FeedAdapter(object : OnInteractionListener {
+
         override fun onLike(post: Post) {
 
         }
@@ -71,8 +74,14 @@ class FeedFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.data.observe(viewLifecycleOwner) { feedModel ->
-            adapter.submitList(feedModel.posts)
+//        viewModel.data.observe(viewLifecycleOwner) { feedModel ->
+//            adapter.submitList(feedModel.posts)
+//        }
+
+        lifecycleScope.launchWhenCreated {
+            viewModel.data.collectLatest {
+                adapter.submitData(it)
+            }
         }
 
         viewModel.edited.observe(viewLifecycleOwner) { edited ->
