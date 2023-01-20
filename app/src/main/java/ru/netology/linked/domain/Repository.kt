@@ -43,7 +43,7 @@ interface Repository {
     suspend fun removePost(postId: Long)
     suspend fun getPostsAfter(count: Int, postId: Long)
     suspend fun getPostsBefore(count: Int, postId: Long)
-    suspend fun likePost(postId: Long)
+    suspend fun likePost(post: Post)
     suspend fun getPostsNewer(postId: Long)
 
     // Users

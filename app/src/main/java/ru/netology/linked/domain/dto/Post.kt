@@ -1,9 +1,5 @@
 package ru.netology.linked.domain.dto
 
-//data class TimingSeparator(
-//    override val id: Long,
-//) : FeedItem()
-
 data class Post(
     override val id: Long,
     val authorId: Long,
@@ -14,11 +10,13 @@ data class Post(
     val published: String,
     val coords: Coordinates? = null,
     val link: String? = null,
-    val linkedOwnerIds: List<Long> = emptyList(),
+    val likeOwnerIds: List<Long> = emptyList(),
     val mentionIds: List<Long> = emptyList(),
     val mentionedMe: Boolean,
     val likedByMe: Boolean,
     val attachment: Attachment? = null,
     val ownedByMe: Boolean,
     val users: Users,
+
+    val likes: Long = 0,
 ) : FeedItem()

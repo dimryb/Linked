@@ -3,14 +3,11 @@ package ru.netology.linked.presentation.viewmodel
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.netology.linked.domain.Repository
 import ru.netology.linked.domain.dto.Post
 import ru.netology.linked.domain.dto.UserPreview
 import ru.netology.linked.domain.dto.Users
-import ru.netology.linked.presentation.model.FeedModel
 import ru.netology.linked.presentation.model.FeedModelState
 import ru.netology.linked.presentation.util.SingleLiveEvent
 import javax.inject.Inject
@@ -114,11 +111,22 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun refresh() {
+    fun refreshPost() {
         viewModelScope.launch {
             _state.value = FeedModelState.Refresh
             try {
                 repository.getPosts()
+                _state.value = FeedModelState.Idle
+            } catch (e: Exception) {
+                _state.value = FeedModelState.Error
+            }
+        }
+    }
+
+    fun likePost(post: Post) {
+        viewModelScope.launch {
+            try {
+                repository.likePost(post)
                 _state.value = FeedModelState.Idle
             } catch (e: Exception) {
                 _state.value = FeedModelState.Error

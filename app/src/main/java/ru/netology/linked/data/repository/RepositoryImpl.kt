@@ -175,8 +175,21 @@ class RepositoryImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override suspend fun likePost(postId: Long) {
-        TODO("Not yet implemented")
+    override suspend fun likePost(post: Post) {
+        try {
+            val response = with(apiService) {
+                if (post.likedByMe) ::dislikePost else ::likePost
+            }(post.id)
+            if (!response.isSuccessful) {
+                throw ApiError(response.code(), response.message())
+            }
+            val body = response.body() ?: throw ApiError(response.code(), response.message())
+            postDao.insertPost(PostEntity.fromDto(body))
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
     }
 
     override suspend fun getPostsNewer(postId: Long) {

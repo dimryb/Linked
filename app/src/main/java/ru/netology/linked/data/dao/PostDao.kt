@@ -5,10 +5,13 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.Companion.REPLACE
 import androidx.room.Query
+import androidx.room.TypeConverters
 import kotlinx.coroutines.flow.Flow
+import ru.netology.linked.data.db.DbConverter
 import ru.netology.linked.data.entity.PostEntity
 
 @Dao
+@TypeConverters(DbConverter::class)
 interface PostDao {
     @Query("SELECT * FROM PostEntity ORDER BY id DESC")
     fun getPosts(): Flow<List<PostEntity>>

@@ -7,9 +7,8 @@ import ru.netology.linked.R
 import ru.netology.linked.databinding.CardPostBinding
 import ru.netology.linked.domain.dto.Post
 import ru.netology.linked.presentation.view.loadAuthorAvatar
-import ru.netology.linked.presentation.view.loadImageMedia
 
-class FeedViewHolder(
+class PostViewHolder(
     private val binding: CardPostBinding,
     private val onInteractionListener: OnInteractionListener,
 ) : RecyclerView.ViewHolder(binding.root) {
@@ -24,6 +23,8 @@ class FeedViewHolder(
             authorTextView.text = post.author
             publishedTextView.text = post.published
             postTextView.text = post.content
+            likesButton.text = post.likes.toString()
+            likesButton.isChecked = post.likedByMe
 
             if (post.authorAvatar != null) {
                 avatarImageView.loadAuthorAvatar(post.authorAvatar)
@@ -36,6 +37,7 @@ class FeedViewHolder(
 
     private fun setupClickListeners(post: Post) {
         binding.apply {
+            likesButton.setOnClickListener { onInteractionListener.onLike(post) }
             menuButton.setOnClickListener { setupPopupMenu(it, post) }
         }
     }

@@ -8,7 +8,7 @@ import ru.netology.linked.R
 import ru.netology.linked.databinding.CardPostBinding
 import ru.netology.linked.domain.dto.FeedItem
 import ru.netology.linked.domain.dto.Post
-import ru.netology.linked.presentation.viewholder.FeedViewHolder
+import ru.netology.linked.presentation.viewholder.PostViewHolder
 import ru.netology.linked.presentation.viewholder.OnInteractionListener
 
 class FeedAdapter(
@@ -22,14 +22,14 @@ class FeedAdapter(
             else -> error("unknown item type")
         }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val binding = CardPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return FeedViewHolder(binding, onInteractionListener)
+        return PostViewHolder(binding, onInteractionListener)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val item = getItem(position)) {
-            is Post -> (holder as? FeedViewHolder)?.bind(item)
+            is Post -> (holder as? PostViewHolder)?.bind(item)
             null -> error("unknown view type")
             else -> error("unknown item type")
         }

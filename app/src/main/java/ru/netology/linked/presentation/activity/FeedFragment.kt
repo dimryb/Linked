@@ -35,7 +35,11 @@ class FeedFragment : Fragment() {
     private val adapter = FeedAdapter(object : OnInteractionListener {
 
         override fun onLike(post: Post) {
-
+            if (authViewModel.authorized) {
+                viewModel.likePost(post)
+            } else {
+                authViewModel.signIn()
+            }
         }
 
         override fun onComment(post: Post, comment: String) {
@@ -96,7 +100,7 @@ class FeedFragment : Fragment() {
             if (state is FeedModelState.Error) {
                 Snackbar.make(binding.root, "Error", Snackbar.LENGTH_LONG)
                     .setAction(R.string.retry_loading) {
-                        viewModel.refresh()
+                        viewModel.refreshPost()
                     }.show()
             }
             binding.swipeRefresh.isRefreshing = state is FeedModelState.Refresh
@@ -112,7 +116,7 @@ class FeedFragment : Fragment() {
             }
         }
         binding.swipeRefresh.setOnRefreshListener {
-            viewModel.refresh()
+            viewModel.refreshPost()
         }
     }
 
