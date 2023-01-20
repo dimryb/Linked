@@ -25,4 +25,5 @@
     <string name="save">Save</string>
     <string name="option_menu_remove">Remove</string>
     <string name="option_menu_edit">Edit</string>
+    <string name="description_post_like">Like</string>
 </resources>
