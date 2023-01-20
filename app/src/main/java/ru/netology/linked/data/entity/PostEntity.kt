@@ -1,8 +1,6 @@
 package ru.netology.linked.data.entity
 
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.*
 import ru.netology.linked.domain.dto.*
 
 @Entity
@@ -15,18 +13,19 @@ data class PostEntity(
     val authorJob: String? = null,
     val content: String,
     val published: String,
+    @Embedded
+    val coords: Coordinates?,
+    val link: String?,
+    val likeOwnerIds: List<Long> = emptyList(),
 //    @Embedded
-//    val coords: Coordinates? = null,
-    val link: String? = null,
-//    val linkedOwnerIds: List<Long> = emptyList(),
-//    val mentionIds: List<Long> = emptyList(),
+//    val mentionIds: List<Long>?,
     val mentionedMe: Boolean,
     val likedByMe: Boolean,
-//    @Embedded
-//    val attachment: Attachment? = null,
+    @Embedded
+    val attachment: Attachment?,
     val ownedByMe: Boolean,
     //val users: Users,
-){
+) {
     fun toDto(): Post = Post(
         id = id,
         authorId = authorId,
@@ -35,15 +34,17 @@ data class PostEntity(
         authorJob = authorJob,
         content = content,
         published = published,
-        //coords = coords,
+        coords = coords,
         link = link,
-//        linkedOwnerIds = linkedOwnerIds,
+        likeOwnerIds = likeOwnerIds,
 //        mentionIds = mentionIds,
         mentionedMe = mentionedMe,
         likedByMe = likedByMe,
-//        attachment = attachment,
+        attachment = attachment,
         ownedByMe = ownedByMe,
         users = Users(UserPreview("")),
+
+        likes = (likeOwnerIds?.size ?: 0).toLong(),
     )
 
     companion object {
@@ -57,13 +58,13 @@ data class PostEntity(
                     authorJob = authorJob,
                     content = content,
                     published = published,
-                    //coords = coords,
+                    coords = coords,
                     link = link,
-                    //linkedOwnerIds = linkedOwnerIds,
+                    likeOwnerIds = likeOwnerIds,
                     //mentionIds = mentionIds,
                     mentionedMe = mentionedMe,
                     likedByMe = likedByMe,
-                    //attachment = attachment,
+                    attachment = attachment,
                     ownedByMe = ownedByMe,
                     //users = users,
                 )
