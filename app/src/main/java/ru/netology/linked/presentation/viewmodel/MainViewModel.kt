@@ -8,7 +8,6 @@ import ru.netology.linked.domain.Repository
 import ru.netology.linked.domain.dto.Post
 import ru.netology.linked.domain.dto.UserPreview
 import ru.netology.linked.domain.dto.Users
-import ru.netology.linked.presentation.model.FeedModelState
 import ru.netology.linked.presentation.util.SingleLiveEvent
 import javax.inject.Inject
 import androidx.paging.cachedIn
@@ -49,6 +48,8 @@ class MainViewModel @Inject constructor(
     val state: LiveData<FeedModelState>
         get() = _state
 
+    val menuState = MutableLiveData<MenuState>()
+
     val edited = MutableLiveData(empty)
     private val _postCreated = SingleLiveEvent<Unit>()
     val postCreated: LiveData<Unit>
@@ -56,6 +57,7 @@ class MainViewModel @Inject constructor(
 
     init {
         getPosts()
+        menuState.value = MenuState()
     }
 
     fun getPosts() {
