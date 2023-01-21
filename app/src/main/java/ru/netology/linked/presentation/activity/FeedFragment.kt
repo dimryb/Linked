@@ -17,10 +17,8 @@ import ru.netology.linked.databinding.FragmentFeedBinding
 import ru.netology.linked.domain.dto.Post
 import ru.netology.linked.presentation.activity.NewPostFragment.Companion.textArg
 import ru.netology.linked.presentation.adapter.FeedAdapter
-import ru.netology.linked.presentation.model.FeedModelState
 import ru.netology.linked.presentation.viewholder.OnInteractionListener
-import ru.netology.linked.presentation.viewmodel.AuthViewModel
-import ru.netology.linked.presentation.viewmodel.MainViewModel
+import ru.netology.linked.presentation.viewmodel.*
 
 @AndroidEntryPoint
 class FeedFragment : Fragment() {
@@ -105,6 +103,15 @@ class FeedFragment : Fragment() {
             }
             binding.swipeRefresh.isRefreshing = state is FeedModelState.Refresh
         }
+
+        viewModel.menuState.observe(viewLifecycleOwner) { state ->
+            with(binding.panelMenuBottom) {
+                homeButton.isChecked = (state.checked == MenuStateChecked.HOME)
+                usersButton.isChecked = (state.checked == MenuStateChecked.USERS)
+                eventsButton.isChecked = (state.checked == MenuStateChecked.EVENTS)
+            }
+
+        }
     }
 
     private fun setupListeners() {
@@ -113,11 +120,22 @@ class FeedFragment : Fragment() {
             viewModel.refreshPost()
         }
 
-        binding.panelMenuBottom.createPostButton.setOnClickListener {
-            if (authViewModel.authorized) {
-                findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
-            } else {
-                authViewModel.signIn()
+        with(binding.panelMenuBottom) {
+            homeButton.setOnClickListener {
+                viewModel.menuState.value = MenuState(MenuStateChecked.HOME)
+            }
+            usersButton.setOnClickListener {
+                viewModel.menuState.value = MenuState(MenuStateChecked.USERS)
+            }
+            eventsButton.setOnClickListener {
+                viewModel.menuState.value = MenuState(MenuStateChecked.EVENTS)
+            }
+            createPostButton.setOnClickListener {
+                if (authViewModel.authorized) {
+                    findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
+                } else {
+                    authViewModel.signIn()
+                }
             }
         }
     }
