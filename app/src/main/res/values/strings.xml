@@ -26,4 +26,8 @@
     <string name="option_menu_remove">Remove</string>
     <string name="option_menu_edit">Edit</string>
     <string name="description_post_like">Like</string>
+    <string name="description_select_home">Home</string>
+    <string name="description_contacts">Contacts</string>
+    <string name="description_events">Events</string>
+    <string name="description_add_post">Add post</string>
 </resources>
