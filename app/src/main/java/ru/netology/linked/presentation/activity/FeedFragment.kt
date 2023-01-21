@@ -108,15 +108,17 @@ class FeedFragment : Fragment() {
     }
 
     private fun setupListeners() {
-        binding.createButton.setOnClickListener {
+
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.refreshPost()
+        }
+
+        binding.panelMenuBottom.createPostButton.setOnClickListener {
             if (authViewModel.authorized) {
                 findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
             } else {
                 authViewModel.signIn()
             }
-        }
-        binding.swipeRefresh.setOnRefreshListener {
-            viewModel.refreshPost()
         }
     }
 
