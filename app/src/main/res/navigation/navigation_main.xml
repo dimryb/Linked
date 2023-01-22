@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_main"
-    app:startDestination="@id/feedFragment">
+    app:startDestination="@id/homeFragment">
 
     <fragment
-        android:id="@+id/feedFragment"
+        android:id="@+id/homeFragment"
         android:name="ru.netology.linked.presentation.activity.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home">

@@ -146,7 +146,7 @@ class HomeFragment : Fragment() {
 
                 }
                 MenuAction.EVENTS -> {
-                    findNavController().navigate(R.id.action_homeFragment_to_eventsFragment)
+
                 }
                 MenuAction.ADD -> {
                     if (authViewModel.authorized) {

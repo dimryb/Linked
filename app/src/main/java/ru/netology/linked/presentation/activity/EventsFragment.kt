@@ -144,7 +144,7 @@ class EventsFragment : Fragment() {
         viewModel.menuAction.observe(viewLifecycleOwner){ action->
             when(action){
                 MenuAction.HOME -> {
-                    findNavController().navigateUp()
+
                 }
                 MenuAction.USERS -> {
 

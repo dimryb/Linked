@@ -57,7 +57,7 @@ class MainViewModel @Inject constructor(
     val menuChecked: LiveData<MenuChecked>
         get() = _menuChecked
 
-    private val _menuAction = MutableLiveData<MenuAction>()
+    private val _menuAction = MutableLiveData(MenuAction.IDLE)
     val menuAction: LiveData<MenuAction>
         get() = _menuAction
 
@@ -75,7 +75,12 @@ class MainViewModel @Inject constructor(
     }
 
     fun bottomMenuAction(action: MenuAction) {
-        _menuAction.value = action
+        menuAction.value?.let {
+            if (it != action){
+                _menuAction.value = action
+            }
+        }
+
         when(action) {
             MenuAction.HOME -> {
                 getPosts()
