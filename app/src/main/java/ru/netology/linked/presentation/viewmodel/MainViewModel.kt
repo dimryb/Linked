@@ -53,10 +53,13 @@ class MainViewModel @Inject constructor(
     val state: LiveData<FeedModelState>
         get() = _state
 
-    private val _menuState = MutableLiveData<MenuState>()
-    val menuState: LiveData<MenuState>
-        get() = _menuState
+    private val _menuChecked = MutableLiveData<MenuChecked>()
+    val menuChecked: LiveData<MenuChecked>
+        get() = _menuChecked
 
+    private val _menuAction = MutableLiveData<MenuAction>()
+    val menuAction: LiveData<MenuAction>
+        get() = _menuAction
 
     val edited = MutableLiveData(empty)
     private val _postCreated = SingleLiveEvent<Unit>()
@@ -65,25 +68,31 @@ class MainViewModel @Inject constructor(
 
     init {
         getPosts()
-        _menuState.value = MenuState()
     }
 
-    private fun setMenuState(state: MenuState){
-        _menuState.value = state
+    private fun setMenuChecked(checked: MenuChecked){
+        _menuChecked.value = checked
     }
 
-    fun bottomMenuAction(state: MenuStateChecked) {
-        setMenuState(MenuState(state))
-        when (state) {
-            MenuStateChecked.HOME -> {
+    fun bottomMenuAction(action: MenuAction) {
+        _menuAction.value = action
+        when(action) {
+            MenuAction.HOME -> {
                 getPosts()
+                setMenuChecked(MenuChecked.HOME)
             }
-            MenuStateChecked.USERS -> {
+            MenuAction.USERS -> {
                 getUsers()
+                setMenuChecked(MenuChecked.USERS)
             }
-            MenuStateChecked.EVENTS -> {
+            MenuAction.EVENTS -> {
                 getEvents()
+                setMenuChecked(MenuChecked.EVENTS)
             }
+            MenuAction.ADD -> {
+
+            }
+            else -> {}
         }
     }
 

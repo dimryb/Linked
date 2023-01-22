@@ -13,7 +13,7 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import ru.netology.linked.R
-import ru.netology.linked.databinding.FragmentFeedBinding
+import ru.netology.linked.databinding.FragmentHomeBinding
 import ru.netology.linked.domain.dto.Post
 import ru.netology.linked.presentation.activity.NewPostFragment.Companion.textArg
 import ru.netology.linked.presentation.adapter.FeedAdapter
@@ -21,14 +21,14 @@ import ru.netology.linked.presentation.viewholder.OnInteractionListener
 import ru.netology.linked.presentation.viewmodel.*
 
 @AndroidEntryPoint
-class FeedFragment : Fragment() {
+class HomeFragment : Fragment() {
 
     private val viewModel: MainViewModel by activityViewModels()
     private val authViewModel: AuthViewModel by activityViewModels()
 
-    private var _binding: FragmentFeedBinding? = null
-    private val binding: FragmentFeedBinding
-        get() = _binding ?: throw RuntimeException("FragmentFeedBinding == null!")
+    private var _binding: FragmentHomeBinding? = null
+    private val binding: FragmentHomeBinding
+        get() = _binding ?: throw RuntimeException("FragmentHomeBinding == null!")
 
     private val adapter = FeedAdapter(object : OnInteractionListener {
 
@@ -62,7 +62,7 @@ class FeedFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentFeedBinding.inflate(
+        _binding = FragmentHomeBinding.inflate(
             inflater,
             container,
             false
@@ -71,6 +71,7 @@ class FeedFragment : Fragment() {
 
         observeViewModel()
         setupListeners()
+        menuNavigation()
 
         return binding.root
     }
@@ -81,18 +82,10 @@ class FeedFragment : Fragment() {
 //        }
 
         lifecycleScope.launchWhenCreated {
-            viewModel.dataEvens.collectLatest {
-                adapter.submitData(it)
-            }
-        }
-
-        lifecycleScope.launchWhenCreated {
             viewModel.data.collectLatest {
                 adapter.submitData(it)
             }
         }
-
-
 
         viewModel.edited.observe(viewLifecycleOwner) { edited ->
             if (edited.id == 0L) {
@@ -112,13 +105,12 @@ class FeedFragment : Fragment() {
             binding.swipeRefresh.isRefreshing = state is FeedModelState.Refresh
         }
 
-        viewModel.menuState.observe(viewLifecycleOwner) { state ->
+        viewModel.menuChecked.observe(viewLifecycleOwner) { checked ->
             with(binding.panelMenuBottom) {
-                homeButton.isChecked = (state.checked == MenuStateChecked.HOME)
-                usersButton.isChecked = (state.checked == MenuStateChecked.USERS)
-                eventsButton.isChecked = (state.checked == MenuStateChecked.EVENTS)
+                homeButton.isChecked = (checked == MenuChecked.HOME)
+                usersButton.isChecked = (checked== MenuChecked.USERS)
+                eventsButton.isChecked = (checked == MenuChecked.EVENTS)
             }
-
         }
     }
 
@@ -130,20 +122,40 @@ class FeedFragment : Fragment() {
 
         with(binding.panelMenuBottom) {
             homeButton.setOnClickListener {
-                viewModel.bottomMenuAction(MenuStateChecked.HOME)
+                viewModel.bottomMenuAction(MenuAction.HOME)
             }
             usersButton.setOnClickListener {
-                viewModel.bottomMenuAction(MenuStateChecked.USERS)
+                viewModel.bottomMenuAction(MenuAction.USERS)
             }
             eventsButton.setOnClickListener {
-                viewModel.bottomMenuAction(MenuStateChecked.EVENTS)
+                viewModel.bottomMenuAction(MenuAction.EVENTS)
             }
             createPostButton.setOnClickListener {
-                if (authViewModel.authorized) {
-                    findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
-                } else {
-                    authViewModel.signIn()
+                viewModel.bottomMenuAction(MenuAction.ADD)
+            }
+        }
+    }
+
+    private fun menuNavigation(){
+        viewModel.menuAction.observe(viewLifecycleOwner){ action->
+            when(action){
+                MenuAction.HOME -> {
+
                 }
+                MenuAction.USERS -> {
+
+                }
+                MenuAction.EVENTS -> {
+                    findNavController().navigate(R.id.action_homeFragment_to_eventsFragment)
+                }
+                MenuAction.ADD -> {
+                    if (authViewModel.authorized) {
+                        findNavController().navigate(R.id.action_homeFragment_to_newPostFragment)
+                    } else {
+                        authViewModel.signIn()
+                    }
+                }
+                else -> {}
             }
         }
     }
@@ -156,7 +168,7 @@ class FeedFragment : Fragment() {
     private fun launchEditPost() {
         findNavController()
             .navigate(
-                R.id.action_feedFragment_to_newPostFragment,
+                R.id.action_homeFragment_to_newPostFragment,
                 Bundle().apply {
                     viewModel.edited.value?.content.let {
                         textArg = it
