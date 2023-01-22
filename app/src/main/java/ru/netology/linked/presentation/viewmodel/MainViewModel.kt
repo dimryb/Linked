@@ -1,17 +1,18 @@
 package ru.netology.linked.presentation.viewmodel
 
+import android.net.Uri
+import androidx.core.net.toFile
 import androidx.lifecycle.*
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import ru.netology.linked.domain.Repository
-import ru.netology.linked.domain.dto.Attachment
-import ru.netology.linked.domain.dto.Post
-import ru.netology.linked.domain.dto.UserPreview
-import ru.netology.linked.domain.dto.Users
-import ru.netology.linked.presentation.model.FeedModel
-import ru.netology.linked.presentation.model.FeedModelState
+import ru.netology.linked.domain.dto.*
+import ru.netology.linked.presentation.auth.AppAuth
 import ru.netology.linked.presentation.util.SingleLiveEvent
 import javax.inject.Inject
 
@@ -28,34 +29,98 @@ private val empty = Post(
     users = Users(user = UserPreview(name = "")),
 )
 
+private val noPhoto = PhotoModel()
+
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val repository: Repository,
+    private val appAuth: AppAuth,
 ) : ViewModel() {
 
-    val data: LiveData<FeedModel> = repository.data.map { films ->
-        FeedModel(films, films.isEmpty())
-    }.asLiveData(Dispatchers.Default)
+    private val cachedPosts = repository
+        .data
+        .cachedIn(viewModelScope)
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val data: Flow<PagingData<FeedItem>> = appAuth.authStateFlow
+        .flatMapLatest { cachedPosts }
+
+    private val cachedEvents = repository
+        .eventsDataPagingFlow
+        .cachedIn(viewModelScope)
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val dataEvens: Flow<PagingData<FeedItem>> = appAuth.authStateFlow
+        .flatMapLatest { cachedEvents }
 
     private val _state = MutableLiveData<FeedModelState>()
     val state: LiveData<FeedModelState>
         get() = _state
+
+    private val _menuChecked = MutableLiveData<MenuChecked>()
+    val menuChecked: LiveData<MenuChecked>
+        get() = _menuChecked
+
+    private val _menuAction = MutableLiveData(MenuAction.IDLE)
+    val menuAction: LiveData<MenuAction>
+        get() = _menuAction
 
     val edited = MutableLiveData(empty)
     private val _postCreated = SingleLiveEvent<Unit>()
     val postCreated: LiveData<Unit>
         get() = _postCreated
 
+    private val _photo = MutableLiveData<PhotoModel?>(null)
+    val photo: LiveData<PhotoModel?>
+        get() = _photo
+
     init {
         getPosts()
     }
 
+    fun navigationUp() {
+        _menuAction.value = MenuAction.UP
+    }
+
+    private fun setMenuChecked(checked: MenuChecked) {
+        _menuChecked.value = checked
+    }
+
+    fun bottomMenuAction(action: MenuAction) {
+        menuAction.value?.let {
+            if (it != action) {
+                _menuAction.value = action
+            }
+        }
+
+        when (action) {
+            MenuAction.HOME -> {
+                getPosts()
+                setMenuChecked(MenuChecked.HOME)
+            }
+            MenuAction.USERS -> {
+                getUsers()
+                setMenuChecked(MenuChecked.USERS)
+            }
+            MenuAction.EVENTS -> {
+                getEvents()
+                setMenuChecked(MenuChecked.EVENTS)
+            }
+            MenuAction.ADD -> {
+
+            }
+            else -> {}
+        }
+    }
+
     fun getPosts() {
         viewModelScope.launch {
+            _postCreated.value = Unit
             try {
                 repository.getPosts()
+                _state.value = FeedModelState.Idle
             } catch (e: Exception) {
-                TODO("getPosts Exception")
+                _state.value = FeedModelState.Error
             }
         }
     }
@@ -65,7 +130,7 @@ class MainViewModel @Inject constructor(
             viewModelScope.launch {
                 _postCreated.value = Unit
                 try {
-                    repository.setPost(post)
+                    repository.setPost(post, _photo.value?.uri?.let { MediaUpload(it.toFile()) })
                     _state.value = FeedModelState.Idle
                 } catch (e: Exception) {
                     _state.value = FeedModelState.Error
@@ -73,9 +138,10 @@ class MainViewModel @Inject constructor(
             }
         }
         edited.value = empty
+        _photo.value = noPhoto
     }
 
-    fun edit(post: Post) {
+    fun editPost(post: Post) {
         edited.value = post
     }
 
@@ -88,5 +154,79 @@ class MainViewModel @Inject constructor(
             }
             edited.value = it.copy(content = text)
         }
+    }
+
+    fun removePostById(postId: Long) {
+        viewModelScope.launch {
+            try {
+                repository.removePost(postId)
+                _state.value = FeedModelState.Idle
+            } catch (e: Exception) {
+                _state.value = FeedModelState.Error
+            }
+        }
+    }
+
+    fun refreshPost() {
+        viewModelScope.launch {
+            _state.value = FeedModelState.Refresh
+            try {
+                repository.getPosts()
+                _state.value = FeedModelState.Idle
+            } catch (e: Exception) {
+                _state.value = FeedModelState.Error
+            }
+        }
+    }
+
+    fun likePost(post: Post) {
+        viewModelScope.launch {
+            try {
+                repository.likePost(post)
+                _state.value = FeedModelState.Idle
+            } catch (e: Exception) {
+                _state.value = FeedModelState.Error
+            }
+        }
+    }
+
+    fun getUsers() {
+        viewModelScope.launch {
+            _postCreated.value = Unit
+            try {
+                repository.getUsers()
+                _state.value = FeedModelState.Idle
+            } catch (e: Exception) {
+                _state.value = FeedModelState.Error
+            }
+        }
+    }
+
+    fun getEvents() {
+        viewModelScope.launch {
+            _postCreated.value = Unit
+            try {
+                repository.getEvents()
+                _state.value = FeedModelState.Idle
+            } catch (e: Exception) {
+                _state.value = FeedModelState.Error
+            }
+        }
+    }
+
+    fun editEvent(event: Event) {
+
+    }
+
+    fun removeEventById(id: Long) {
+
+    }
+
+    fun likeEvent(event: Event) {
+
+    }
+
+    fun changePhoto(uri: Uri?) {
+        _photo.value = PhotoModel(uri)
     }
 }

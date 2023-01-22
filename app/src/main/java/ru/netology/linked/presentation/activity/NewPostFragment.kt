@@ -1,11 +1,15 @@
 package ru.netology.linked.presentation.activity
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.MenuProvider
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
+import com.github.dhaval2404.imagepicker.ImagePicker
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.linked.R
 import ru.netology.linked.databinding.FragmentNewPostBinding
@@ -21,6 +25,18 @@ class NewPostFragment : Fragment() {
 
     private val viewModel: MainViewModel by activityViewModels()
     private val authViewModel: AuthViewModel by activityViewModels()
+
+    private val photoLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            when (it.resultCode) {
+                ImagePicker.RESULT_ERROR -> {
+                    Toast.makeText(requireContext(), "Image pick error", Toast.LENGTH_SHORT).show()
+                }
+                Activity.RESULT_OK -> {
+                    viewModel.changePhoto(it.data?.data)
+                }
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,14 +77,33 @@ class NewPostFragment : Fragment() {
 
     private fun observeViewModel() {
         viewModel.postCreated.observe(viewLifecycleOwner) {
-            findNavController().navigateUp()
+            viewModel.navigationUp()
         }
 
-
+        viewModel.photo.observe(viewLifecycleOwner) {
+            binding.photoLayout.isVisible = it != null
+            binding.photo.setImageURI(it?.uri)
+        }
     }
 
     private fun setupClickListeners() {
+        binding.takePhoto.setOnClickListener {
+            ImagePicker.Builder(this)
+                .cameraOnly()
+                .maxResultSize(2048, 2048)
+                .createIntent(photoLauncher::launch)
+        }
 
+        binding.pickPhoto.setOnClickListener {
+            ImagePicker.Builder(this)
+                .galleryOnly()
+                .maxResultSize(2048, 2048)
+                .createIntent(photoLauncher::launch)
+        }
+
+        binding.removePhoto.setOnClickListener {
+            viewModel.changePhoto(null)
+        }
     }
 
     override fun onDestroy() {

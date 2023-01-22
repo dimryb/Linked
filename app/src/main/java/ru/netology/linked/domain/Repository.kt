@@ -1,63 +1,62 @@
 package ru.netology.linked.domain
 
+import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
-import ru.netology.linked.domain.dto.Authentication
-import ru.netology.linked.domain.dto.Event
-import ru.netology.linked.domain.dto.Job
-import ru.netology.linked.domain.dto.Post
+import ru.netology.linked.domain.dto.*
 
 interface Repository {
 
-    val data: Flow<List<Post>>
+    val data: Flow<PagingData<FeedItem>>
+    val eventsDataPagingFlow: Flow<PagingData<FeedItem>>
 
     // Events
-    fun getEvents()
-    fun setEvent(event: Event)
-    fun getEventsLatest(count: Int)
-    fun getEvent(eventId: Long)
-    fun removeEvent(eventId: Long)
-    fun getEventsAfter(count: Int, eventId: Long)
-    fun getEventsBefore(count: Int, eventId: Long)
-    fun likeEvent(eventId: Long)
-    fun getEventsNewer(eventId: Long)
-    fun getEventParticipants(eventId: Long)
+    suspend fun getEvents()
+    suspend fun setEvent(event: Event, upload: MediaUpload?)
+    suspend fun getEventsLatest(count: Int)
+    suspend fun getEvent(eventId: Long)
+    suspend fun removeEvent(eventId: Long)
+    suspend fun getEventsAfter(count: Int, eventId: Long)
+    suspend fun getEventsBefore(count: Int, eventId: Long)
+    suspend fun likeEvent(eventId: Long)
+    suspend fun getEventsNewer(eventId: Long)
+    suspend fun getEventParticipants(eventId: Long)
 
     // Media
-    fun saveMedia(file: String)
+    suspend fun saveMedia(upload: MediaUpload): Media
 
     // Jobs
-    fun getJobs()
-    fun setJob(job: Job)
-    fun removeJob(jobId: Long)
+    suspend fun getJobs()
+    suspend fun setJob(job: Job)
+    suspend fun removeJob(jobId: Long)
 
     // MyWall
-    fun getMyWall()
-    fun getMyWallLatest(count: Int)
-    fun getMyWallAfter(count: Int, postId: Long)
-    fun getMyWallBefore(count: Int, postId: Long)
-    fun getMyWallNewer(postId: Long)
+    suspend fun getMyWall()
+    suspend fun getMyWallLatest(count: Int)
+    suspend fun getMyWallAfter(count: Int, postId: Long)
+    suspend fun getMyWallBefore(count: Int, postId: Long)
+    suspend fun getMyWallNewer(postId: Long)
 
     // Posts
     suspend fun getPosts()
-    suspend fun setPost(post: Post)
-    fun getPostsLatest(count: Int)
-    fun getPost(postId: Long)
-    fun removePost(postId: Long)
-    fun getPostsAfter(count: Int, postId: Long)
-    fun getPostsBefore(count: Int, postId: Long)
-    fun likePost(postId: Long)
-    fun getPostsNewer(postId: Long)
+    suspend fun setPost(post: Post, upload: MediaUpload?)
+    suspend fun getPostsLatest(count: Int)
+    suspend fun getPost(postId: Long)
+    suspend fun removePost(postId: Long)
+    suspend fun getPostsAfter(count: Int, postId: Long)
+    suspend fun getPostsBefore(count: Int, postId: Long)
+    suspend fun likePost(post: Post)
+    suspend fun getPostsNewer(postId: Long)
 
     // Users
-    fun getUsers()
-    //fun authentication(authentication: Authentication)
-    //fun registration(login: String, password: String, name: String, file: String? = null)
-    fun getUser(userId: Long)
+    suspend fun getUsers()
+    // fun authentication(authentication: Authentication)
+    // fun registration(login: String, password: String, name: String, file: String? = null)
+    suspend fun getUser(userId: Long)
 
     // Wall
-    fun getWall(authorId: Long)
-    fun getWallLatest(authorId: Long, count: Int)
-    fun getWallAfter(authorId: Long, count: Int, postId: Long)
-    fun getWallBefore(authorId: Long, count: Int, postId: Long)
-    fun getWallNewer(authorId: Long, postId: Long)
+    suspend fun getWall(authorId: Long)
+    suspend fun getWallLatest(authorId: Long, count: Int)
+    suspend fun getWallAfter(authorId: Long, count: Int, postId: Long)
+    suspend fun getWallBefore(authorId: Long, count: Int, postId: Long)
+    suspend fun getWallNewer(authorId: Long, postId: Long)
 }

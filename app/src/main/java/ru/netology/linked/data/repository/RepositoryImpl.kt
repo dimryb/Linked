@@ -1,103 +1,158 @@
 package ru.netology.linked.data.repository
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.flowOn
+import androidx.paging.*
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import ru.netology.linked.data.api.ApiService
+import ru.netology.linked.data.dao.EventRemoteKeyDao
 import ru.netology.linked.data.dao.PostDao
+import ru.netology.linked.data.dao.PostRemoteKeyDao
+import ru.netology.linked.data.db.AppDb
+import ru.netology.linked.data.entity.EventEntity
 import ru.netology.linked.data.entity.PostEntity
-import ru.netology.linked.data.entity.toDto
 import ru.netology.linked.data.entity.toEntity
 import ru.netology.linked.data.error.ApiError
 import ru.netology.linked.data.error.NetworkError
+import ru.netology.linked.data.error.UnknownError
 import ru.netology.linked.domain.Repository
-import ru.netology.linked.domain.dto.Event
-import ru.netology.linked.domain.dto.Job
-import ru.netology.linked.domain.dto.Post
+import ru.netology.linked.domain.dto.*
 import java.io.IOException
 import javax.inject.Inject
-import ru.netology.linked.data.error.UnknownError
 
 class RepositoryImpl @Inject constructor(
     private val postDao: PostDao,
     private val apiService: ApiService,
+    postRemoteKeyDao: PostRemoteKeyDao,
+    eventRemoteKeyDao: EventRemoteKeyDao,
+    appDb: AppDb,
 ) : Repository {
 
-    override val data = postDao.getPosts().map(List<PostEntity>::toDto).flowOn(Dispatchers.Default)
+    @OptIn(ExperimentalPagingApi::class)
+    override val data: Flow<PagingData<FeedItem>> = Pager<Int, PostEntity>(
+        config = PagingConfig(pageSize = 10, enablePlaceholders = false),
+        pagingSourceFactory = postDao::getPostsPagingSource,
+        remoteMediator = PostRemoteMediator(
+            service = apiService,
+            postDao = postDao,
+            postRemoteKeyDao = postRemoteKeyDao,
+            appDb = appDb,
+        )
+    ).flow.map { pagingData ->
+        pagingData.map(PostEntity::toDto)
+    }
 
-    override fun getEvents() {
+    @OptIn(ExperimentalPagingApi::class)
+    override val eventsDataPagingFlow: Flow<PagingData<FeedItem>> = Pager<Int, EventEntity>(
+        config = PagingConfig(pageSize = 10, enablePlaceholders = false),
+        pagingSourceFactory = postDao::getEventsPagingSource,
+        remoteMediator = EventRemoteMediator(
+            service = apiService,
+            postDao = postDao,
+            eventRemoteKeyDao = eventRemoteKeyDao,
+            appDb = appDb,
+        )
+    ).flow.map { pagingData ->
+        pagingData.map(EventEntity::toDto)
+    }
+
+    override suspend fun getEvents() {
+        try {
+            val response = apiService.getEvents()
+            if (!response.isSuccessful) {
+                throw ApiError(response.code(), response.message())
+            }
+            val body = response.body() ?: throw ApiError(response.code(), response.message())
+            val events = body.toEntity()
+            postDao.insertEvents(events)
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw e
+            //throw UnknownError
+        }
+    }
+
+    override suspend fun setEvent(event: Event, upload: MediaUpload?) {
         TODO("Not yet implemented")
     }
 
-    override fun setEvent(event: Event) {
+    override suspend fun getEventsLatest(count: Int) {
         TODO("Not yet implemented")
     }
 
-    override fun getEventsLatest(count: Int) {
+    override suspend fun getEvent(eventId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun getEvent(eventId: Long) {
+    override suspend fun removeEvent(eventId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun removeEvent(eventId: Long) {
+    override suspend fun getEventsAfter(count: Int, eventId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun getEventsAfter(count: Int, eventId: Long) {
+    override suspend fun getEventsBefore(count: Int, eventId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun getEventsBefore(count: Int, eventId: Long) {
+    override suspend fun likeEvent(eventId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun likeEvent(eventId: Long) {
+    override suspend fun getEventsNewer(eventId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun getEventsNewer(eventId: Long) {
+    override suspend fun getEventParticipants(eventId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun getEventParticipants(eventId: Long) {
+    override suspend fun saveMedia(upload: MediaUpload): Media {
+        try {
+            val part = MultipartBody.Part.createFormData(
+                "file", upload.file.name, upload.file.asRequestBody()
+            )
+            val response = apiService.saveMedia(part)
+            return response.body() ?: throw ApiError(response.code(), response.message())
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
+    }
+
+    override suspend fun getJobs() {
         TODO("Not yet implemented")
     }
 
-    override fun saveMedia(file: String) {
+    override suspend fun setJob(job: Job) {
         TODO("Not yet implemented")
     }
 
-    override fun getJobs() {
+    override suspend fun removeJob(jobId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun setJob(job: Job) {
+    override suspend fun getMyWall() {
         TODO("Not yet implemented")
     }
 
-    override fun removeJob(jobId: Long) {
+    override suspend fun getMyWallLatest(count: Int) {
         TODO("Not yet implemented")
     }
 
-    override fun getMyWall() {
+    override suspend fun getMyWallAfter(count: Int, postId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun getMyWallLatest(count: Int) {
+    override suspend fun getMyWallBefore(count: Int, postId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun getMyWallAfter(count: Int, postId: Long) {
-        TODO("Not yet implemented")
-    }
-
-    override fun getMyWallBefore(count: Int, postId: Long) {
-        TODO("Not yet implemented")
-    }
-
-    override fun getMyWallNewer(postId: Long) {
+    override suspend fun getMyWallNewer(postId: Long) {
         TODO("Not yet implemented")
     }
 
@@ -116,82 +171,114 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun setPost(post: Post) {
+    override suspend fun setPost(post: Post, upload: MediaUpload?) {
         try {
-            val response = apiService.setPost(post)
+            val postWithAttachment = upload?.let {
+                saveMedia(it)
+            }?.let {
+                post.copy(attachment = Attachment(it.url, AttachmentType.IMAGE))
+            }
+            val response = apiService.setPost(postWithAttachment ?: post)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
+
             val body = response.body() ?: throw ApiError(response.code(), response.message())
             postDao.insertPost(PostEntity.fromDto(body))
-        }catch (e: IOException) {
+        } catch (e: IOException) {
             throw NetworkError
         } catch (e: Exception) {
             throw UnknownError
         }
     }
 
-    override fun getPostsLatest(count: Int) {
+    override suspend fun getPostsLatest(count: Int) {
         TODO("Not yet implemented")
     }
 
-    override fun getPost(postId: Long) {
+    override suspend fun getPost(postId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun removePost(postId: Long) {
+    override suspend fun removePost(postId: Long) {
+        try {
+            val response = apiService.removePost(postId)
+            if (!response.isSuccessful) {
+                throw ApiError(response.code(), response.message())
+            }
+            postDao.removePost(postId)
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
+    }
+
+    override suspend fun getPostsAfter(count: Int, postId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun getPostsAfter(count: Int, postId: Long) {
+    override suspend fun getPostsBefore(count: Int, postId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun getPostsBefore(count: Int, postId: Long) {
+    override suspend fun likePost(post: Post) {
+        try {
+            val response = with(apiService) {
+                if (post.likedByMe) ::dislikePost else ::likePost
+            }(post.id)
+            if (!response.isSuccessful) {
+                throw ApiError(response.code(), response.message())
+            }
+            val body = response.body() ?: throw ApiError(response.code(), response.message())
+            postDao.insertPost(PostEntity.fromDto(body))
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
+    }
+
+    override suspend fun getPostsNewer(postId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun likePost(postId: Long) {
+    override suspend fun getUsers() {
+        try {
+            val response = apiService.getUsers()
+            if (!response.isSuccessful) {
+                throw ApiError(response.code(), response.message())
+            }
+            val body = response.body() ?: throw ApiError(response.code(), response.message())
+            postDao.insertUsers(body.toEntity())
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
+    }
+
+    override suspend fun getUser(userId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun getPostsNewer(postId: Long) {
+    override suspend fun getWall(authorId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun getUsers() {
+    override suspend fun getWallLatest(authorId: Long, count: Int) {
         TODO("Not yet implemented")
     }
 
-//    override fun authentication(authentication: Authentication) {
-//        TODO("Not yet implemented")
-//    }
-//
-//    override fun registration(login: String, password: String, name: String, file: String?) {
-//        TODO("Not yet implemented")
-//    }
-
-    override fun getUser(userId: Long) {
+    override suspend fun getWallAfter(authorId: Long, count: Int, postId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun getWall(authorId: Long) {
+    override suspend fun getWallBefore(authorId: Long, count: Int, postId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun getWallLatest(authorId: Long, count: Int) {
-        TODO("Not yet implemented")
-    }
-
-    override fun getWallAfter(authorId: Long, count: Int, postId: Long) {
-        TODO("Not yet implemented")
-    }
-
-    override fun getWallBefore(authorId: Long, count: Int, postId: Long) {
-        TODO("Not yet implemented")
-    }
-
-    override fun getWallNewer(authorId: Long, postId: Long) {
+    override suspend fun getWallNewer(authorId: Long, postId: Long) {
         TODO("Not yet implemented")
     }
 }

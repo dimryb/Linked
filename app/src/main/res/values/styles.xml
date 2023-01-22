@@ -9,9 +9,38 @@
         <item name="iconTint">?attr/colorControlNormal</item>
     </style>
 
+    <style name="Widget.AppTheme.CounterButton"
+        parent="Widget.AppTheme.Button">
+        <item name="android:minWidth">@dimen/icon_button_min_width</item>
+        <item name="android:minHeight">@dimen/icon_button_min_height</item>
+    </style>
+
+    <style name="Widget.AppTheme.CounterButton.Like"
+        parent="Widget.AppTheme.CounterButton">
+        <item name="iconTint">@color/like_checkbox_tint</item>
+    </style>
+
     <style name="Widget.AppTheme.Button.Options"
         parent="Widget.AppTheme.Button">
     </style>
 
+    <style name="Widget.AppTheme.IconButton"
+        parent="Widget.MaterialComponents.Button.TextButton.Icon">
+        <item name="iconTint">?attr/colorControlNormal</item>
+        <item name="iconPadding">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:paddingStart">@dimen/icon_button_padding</item>
+        <item name="android:paddingEnd">@dimen/icon_button_padding</item>
+        <item name="android:minWidth">@dimen/icon_button_min_size</item>
+        <item name="android:minHeight">@dimen/icon_button_min_size</item>
+        <item name="iconGravity">textStart</item>
+    </style>
 
+    <style name="Widget.AppTheme.IconCheckableButton"
+        parent="Widget.AppTheme.IconButton">
+        <item name="android:checkable">true</item>
+    </style>
+
+    <dimen name="icon_button_padding">12dp</dimen>
 </resources>

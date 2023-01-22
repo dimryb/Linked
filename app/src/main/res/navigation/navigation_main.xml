@@ -3,16 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_main"
-    app:startDestination="@id/feedFragment">
+    app:startDestination="@id/homeFragment">
 
     <fragment
-        android:id="@+id/feedFragment"
-        android:name="ru.netology.linked.presentation.activity.FeedFragment"
-        android:label="fragment_feed"
-        tools:layout="@layout/fragment_feed" >
+        android:id="@+id/homeFragment"
+        android:name="ru.netology.linked.presentation.activity.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home">
         <action
-            android:id="@+id/action_feedFragment_to_newPostFragment"
+            android:id="@+id/action_homeFragment_to_newPostFragment"
             app:destination="@id/newPostFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_eventsFragment"
+            app:destination="@id/eventsFragment" />
     </fragment>
     <fragment
         android:id="@+id/newPostFragment"
@@ -23,5 +26,17 @@
             android:name="content"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/eventsFragment"
+        android:name="ru.netology.linked.presentation.activity.EventsFragment"
+        android:label="EventsFragment" />
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="ru.netology.linked.presentation.activity.SignUpFragment"
+        android:label="SignUpFragment" />
+    <fragment
+        android:id="@+id/signInFragment"
+        android:name="ru.netology.linked.presentation.activity.SignInFragment"
+        android:label="SignInFragment" />
 
 </navigation>

@@ -7,7 +7,7 @@ data class Event(
     val authorAvatar: String? = null,
     val authorJob: String? = null,
     val content: String,
-    val dateTime: String,
+    val datetime: String,
     val published: String,
     val coords: Coordinates? = null,
     val type: EventType,
@@ -19,6 +19,8 @@ data class Event(
     val link: String? = null,
     val ownerByMe: Boolean,
     val users: Users,
+
+    val likes: Long = 0,
 ) : FeedItem() {
     enum class EventType {
         OFFLINE,

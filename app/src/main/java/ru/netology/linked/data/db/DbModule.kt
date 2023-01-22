@@ -20,5 +20,6 @@ class DbModule {
         context: Context
     ): AppDb = Room.databaseBuilder(context, AppDb::class.java, "app")
         .fallbackToDestructiveMigration()
+        .addTypeConverter(DbConverter())
         .build()
 }
