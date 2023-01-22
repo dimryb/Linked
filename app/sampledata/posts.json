@@ -5,7 +5,8 @@
 			"author": "Linked",
 			"authorAvatar": "@drawable/posts_avatars",
 			"published": "10 января в 21:39",
-			"content": "Это демо пост в социальной сети Linked"
+			"content": "Это демо пост в социальной сети Linked новый",
+			"eventType": "Онлайн"
 		}
 	]
 }

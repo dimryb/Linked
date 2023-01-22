@@ -31,4 +31,6 @@
     <string name="description_contacts">Контакты</string>
     <string name="description_events">События</string>
     <string name="description_add_post">Создать пост</string>
+    <string name="event_label">Событие:</string>
+    <string name="media_image">Иллюстрация медия</string>
 </resources>
