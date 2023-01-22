@@ -40,6 +40,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
 
         observeViewModel()
         menuNavigation(navController)
+        authNavigation(navController)
     }
 
     private fun observeViewModel() {
@@ -75,25 +76,21 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
                 currentMenuProvider = this
             })
         }
+    }
 
+    private fun authNavigation(navController: NavController) {
         authViewModel.token.observe(this) { token ->
             println("Token ${token.id} ${token.token}")
             appAuth.setAuth(token.id, token.token ?: "")
-            supportFragmentManager.popBackStack()
+            navController.navigateUp()
         }
 
         authViewModel.signUpSignal.observe(this) {
-            supportFragmentManager.beginTransaction()
-                .add(R.id.main_activity, SignUpFragment())
-                .addToBackStack("SignUp")
-                .commit()
+            navController.navigate(R.id.signUpFragment)
         }
 
         authViewModel.signInSignal.observe(this) {
-            supportFragmentManager.beginTransaction()
-                .add(R.id.main_activity, SignInFragment())
-                .addToBackStack("SignIn")
-                .commit()
+            navController.navigate(R.id.signInFragment)
         }
     }
 

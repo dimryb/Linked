@@ -30,5 +30,13 @@
         android:id="@+id/eventsFragment"
         android:name="ru.netology.linked.presentation.activity.EventsFragment"
         android:label="EventsFragment" />
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="ru.netology.linked.presentation.activity.SignUpFragment"
+        android:label="SignUpFragment" />
+    <fragment
+        android:id="@+id/signInFragment"
+        android:name="ru.netology.linked.presentation.activity.SignInFragment"
+        android:label="SignInFragment" />
 
 </navigation>
