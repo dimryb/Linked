@@ -45,7 +45,8 @@ class EventViewHolder(
                 media.visibility = View.GONE
                 mediaImageView.visibility = View.GONE
             } else {
-                media.visibility =
+                media.visibility = View.VISIBLE
+                mediaImageView.visibility =
                     if (event.attachment.type == AttachmentType.IMAGE) View.VISIBLE else View.GONE
 
                 when (event.attachment.type) {
