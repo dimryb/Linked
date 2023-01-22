@@ -17,10 +17,7 @@ fun ImageView.load(url: String, vararg transforms: BitmapTransformation = emptyA
 fun ImageView.loadCircleCrop(url: String, vararg transforms: BitmapTransformation = emptyArray()) =
     load(url, CircleCrop(), *transforms)
 
-fun String.fullAvatarsUrl() = "${BuildConfig.BASE_URL}/avatars/$this"
-fun String.fullImagesUrl() = "${BuildConfig.BASE_URL}/media/$this"
-
 fun ImageView.loadAuthorAvatar(fileName: String) = loadCircleCrop(fileName)
 fun ImageView.loadImageMedia(fileName: String) {
-    load(fileName.fullImagesUrl(), FitCenter())
+    load(fileName, FitCenter())
 }

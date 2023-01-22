@@ -5,8 +5,10 @@ import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.linked.R
 import ru.netology.linked.databinding.CardEventBinding
+import ru.netology.linked.domain.dto.AttachmentType
 import ru.netology.linked.domain.dto.Event
 import ru.netology.linked.presentation.view.loadAuthorAvatar
+import ru.netology.linked.presentation.view.loadImageMedia
 
 class EventViewHolder(
     private val binding: CardEventBinding,
@@ -37,6 +39,22 @@ class EventViewHolder(
                 avatarImageView.setImageResource(R.drawable.posts_avatars)
             }
             menuButton.visibility = if (event.ownerByMe) View.VISIBLE else View.GONE
+
+            if (event.attachment == null) {
+                mediaImageView.setImageResource(0)
+                media.visibility = View.GONE
+                mediaImageView.visibility = View.GONE
+            } else {
+                media.visibility =
+                    if (event.attachment.type == AttachmentType.IMAGE) View.VISIBLE else View.GONE
+
+                when (event.attachment.type) {
+                    AttachmentType.IMAGE -> {
+                        mediaImageView.loadImageMedia(event.attachment.url)
+                    }
+                    else -> {}
+                }
+            }
         }
     }
 
