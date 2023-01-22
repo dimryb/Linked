@@ -1,5 +1,7 @@
 package ru.netology.linked.presentation.viewmodel
 
+import android.net.Uri
+import androidx.core.net.toFile
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -26,6 +28,8 @@ private val empty = Post(
     ownedByMe = false,
     users = Users(user = UserPreview(name = "")),
 )
+
+private val noPhoto = PhotoModel()
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -66,26 +70,30 @@ class MainViewModel @Inject constructor(
     val postCreated: LiveData<Unit>
         get() = _postCreated
 
+    private val _photo = MutableLiveData<PhotoModel?>(null)
+    val photo: LiveData<PhotoModel?>
+        get() = _photo
+
     init {
         getPosts()
     }
 
-    fun navigationUp(){
+    fun navigationUp() {
         _menuAction.value = MenuAction.UP
     }
 
-    private fun setMenuChecked(checked: MenuChecked){
+    private fun setMenuChecked(checked: MenuChecked) {
         _menuChecked.value = checked
     }
 
     fun bottomMenuAction(action: MenuAction) {
         menuAction.value?.let {
-            if (it != action){
+            if (it != action) {
                 _menuAction.value = action
             }
         }
 
-        when(action) {
+        when (action) {
             MenuAction.HOME -> {
                 getPosts()
                 setMenuChecked(MenuChecked.HOME)
@@ -122,7 +130,7 @@ class MainViewModel @Inject constructor(
             viewModelScope.launch {
                 _postCreated.value = Unit
                 try {
-                    repository.setPost(post)
+                    repository.setPost(post, _photo.value?.uri?.let { MediaUpload(it.toFile()) })
                     _state.value = FeedModelState.Idle
                 } catch (e: Exception) {
                     _state.value = FeedModelState.Error
@@ -130,6 +138,7 @@ class MainViewModel @Inject constructor(
             }
         }
         edited.value = empty
+        _photo.value = noPhoto
     }
 
     fun editPost(post: Post) {
@@ -215,5 +224,9 @@ class MainViewModel @Inject constructor(
 
     fun likeEvent(event: Event) {
 
+    }
+
+    fun changePhoto(uri: Uri?) {
+        _photo.value = PhotoModel(uri)
     }
 }

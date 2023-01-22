@@ -3,6 +3,8 @@ package ru.netology.linked.data.repository
 import androidx.paging.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import ru.netology.linked.data.api.ApiService
 import ru.netology.linked.data.dao.EventRemoteKeyDao
 import ru.netology.linked.data.dao.PostDao
@@ -72,7 +74,7 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun setEvent(event: Event) {
+    override suspend fun setEvent(event: Event, upload: MediaUpload?) {
         TODO("Not yet implemented")
     }
 
@@ -108,8 +110,18 @@ class RepositoryImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override suspend fun saveMedia(file: String) {
-        TODO("Not yet implemented")
+    override suspend fun saveMedia(upload: MediaUpload): Media {
+        try {
+            val part = MultipartBody.Part.createFormData(
+                "file", upload.file.name, upload.file.asRequestBody()
+            )
+            val response = apiService.saveMedia(part)
+            return response.body() ?: throw ApiError(response.code(), response.message())
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
     }
 
     override suspend fun getJobs() {
@@ -159,12 +171,18 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun setPost(post: Post) {
+    override suspend fun setPost(post: Post, upload: MediaUpload?) {
         try {
-            val response = apiService.setPost(post)
+            val postWithAttachment = upload?.let {
+                saveMedia(it)
+            }?.let {
+                post.copy(attachment = Attachment(it.url, AttachmentType.IMAGE))
+            }
+            val response = apiService.setPost(postWithAttachment ?: post)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
+
             val body = response.body() ?: throw ApiError(response.code(), response.message())
             postDao.insertPost(PostEntity.fromDto(body))
         } catch (e: IOException) {

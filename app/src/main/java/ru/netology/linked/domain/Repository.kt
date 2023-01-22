@@ -11,7 +11,7 @@ interface Repository {
 
     // Events
     suspend fun getEvents()
-    suspend fun setEvent(event: Event)
+    suspend fun setEvent(event: Event, upload: MediaUpload?)
     suspend fun getEventsLatest(count: Int)
     suspend fun getEvent(eventId: Long)
     suspend fun removeEvent(eventId: Long)
@@ -22,7 +22,7 @@ interface Repository {
     suspend fun getEventParticipants(eventId: Long)
 
     // Media
-    suspend fun saveMedia(file: String)
+    suspend fun saveMedia(upload: MediaUpload): Media
 
     // Jobs
     suspend fun getJobs()
@@ -38,7 +38,7 @@ interface Repository {
 
     // Posts
     suspend fun getPosts()
-    suspend fun setPost(post: Post)
+    suspend fun setPost(post: Post, upload: MediaUpload?)
     suspend fun getPostsLatest(count: Int)
     suspend fun getPost(postId: Long)
     suspend fun removePost(postId: Long)

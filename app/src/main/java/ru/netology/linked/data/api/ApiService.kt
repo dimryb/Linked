@@ -51,6 +51,7 @@ interface ApiService {
     suspend fun removeEventParticipants(@Path("event_id") eventId: Long): Response<Event>
 
     // Media
+    @Multipart
     @POST("media/")
     suspend fun saveMedia(@Part part: MultipartBody.Part): Response<Media>
 
