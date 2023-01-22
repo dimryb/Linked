@@ -77,7 +77,7 @@
         android:layout_margin="@dimen/common_spacing"
         android:lineSpacingExtra="6dp"
         android:textColor="?attr/colorControlNormal"
-        app:layout_constraintBottom_toTopOf="@id/bottomBarrier"
+        app:layout_constraintBottom_toTopOf="@id/media"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/headerTitleBarrier"
@@ -101,5 +101,35 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/bottomBarrier"
         tools:text="0" />
+
+    <LinearLayout
+        android:id="@+id/media"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toTopOf="@id/bottomBarrier"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/postTextView">
+
+        <ImageView
+            android:id="@+id/mediaImageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/common_spacing"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/media_image"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="parent"
+            app:srcCompat="@mipmap/media"
+            tools:visibility="visible"
+            tools:srcCompat="@mipmap/media" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

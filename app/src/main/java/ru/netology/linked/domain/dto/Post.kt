@@ -15,7 +15,7 @@ data class Post(
     val mentionedMe: Boolean,
     val likedByMe: Boolean,
     val attachment: Attachment? = null,
-    val ownerByMe: Boolean,
+    val ownedByMe: Boolean,
     val users: Users,
 
     val likes: Long = 0,

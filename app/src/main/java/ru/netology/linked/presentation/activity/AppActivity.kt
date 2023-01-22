@@ -109,6 +109,9 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
                 MenuAction.ADD -> {
 
                 }
+                MenuAction.UP -> {
+                    navController.navigateUp()
+                }
                 else -> {}
             }
         }

@@ -12,4 +12,6 @@ enum class MenuAction{
     USERS,
     EVENTS,
     ADD,
+
+    UP,
 }

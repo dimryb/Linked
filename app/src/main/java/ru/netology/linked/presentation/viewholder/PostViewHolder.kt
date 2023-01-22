@@ -31,7 +31,7 @@ class PostViewHolder(
             } else {
                 avatarImageView.setImageResource(R.drawable.posts_avatars)
             }
-            menuButton.visibility = if (post.ownerByMe) View.VISIBLE else View.GONE
+            menuButton.visibility = if (post.ownedByMe) View.VISIBLE else View.GONE
         }
     }
 

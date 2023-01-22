@@ -41,7 +41,7 @@ data class PostEntity(
         mentionedMe = mentionedMe,
         likedByMe = likedByMe,
         attachment = attachment,
-        ownerByMe = ownedByMe,
+        ownedByMe = ownedByMe,
         users = Users(UserPreview("")),
 
         likes = likeOwnerIds.size.toLong(),
@@ -65,7 +65,7 @@ data class PostEntity(
                     mentionedMe = mentionedMe,
                     likedByMe = likedByMe,
                     attachment = attachment,
-                    ownedByMe = ownerByMe,
+                    ownedByMe = ownedByMe,
                     //users = users, //TODO: сделать правильно
                 )
             }

@@ -23,7 +23,7 @@ private val empty = Post(
     likedByMe = false,
     published = "",
     mentionedMe = false,
-    ownerByMe = false,
+    ownedByMe = false,
     users = Users(user = UserPreview(name = "")),
 )
 
@@ -68,6 +68,10 @@ class MainViewModel @Inject constructor(
 
     init {
         getPosts()
+    }
+
+    fun navigationUp(){
+        _menuAction.value = MenuAction.UP
     }
 
     private fun setMenuChecked(checked: MenuChecked){
