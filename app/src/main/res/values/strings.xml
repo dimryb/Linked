@@ -32,4 +32,6 @@
     <string name="description_add_post">Add post</string>
     <string name="event_label">Event:</string>
     <string name="media_image">Media image</string>
+    <string name="Offline">Offline</string>
+    <string name="Online">Online</string>
 </resources>

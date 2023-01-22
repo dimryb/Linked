@@ -41,10 +41,10 @@ data class PostEntity(
         mentionedMe = mentionedMe,
         likedByMe = likedByMe,
         attachment = attachment,
-        ownedByMe = ownedByMe,
+        ownerByMe = ownedByMe,
         users = Users(UserPreview("")),
 
-        likes = (likeOwnerIds?.size ?: 0).toLong(), //TODO: сделать правильно
+        likes = likeOwnerIds.size.toLong(),
     )
 
     companion object {
@@ -65,7 +65,7 @@ data class PostEntity(
                     mentionedMe = mentionedMe,
                     likedByMe = likedByMe,
                     attachment = attachment,
-                    ownedByMe = ownedByMe,
+                    ownedByMe = ownerByMe,
                     //users = users, //TODO: сделать правильно
                 )
             }

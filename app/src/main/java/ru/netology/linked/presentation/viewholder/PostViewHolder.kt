@@ -10,7 +10,7 @@ import ru.netology.linked.presentation.view.loadAuthorAvatar
 
 class PostViewHolder(
     private val binding: CardPostBinding,
-    private val onInteractionListener: OnInteractionListener,
+    private val onInteractionListener: OnInteractionListener<Post>,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(post: Post) {
@@ -31,7 +31,7 @@ class PostViewHolder(
             } else {
                 avatarImageView.setImageResource(R.drawable.posts_avatars)
             }
-            menuButton.visibility = if (post.ownedByMe) View.VISIBLE else View.GONE
+            menuButton.visibility = if (post.ownerByMe) View.VISIBLE else View.GONE
         }
     }
 

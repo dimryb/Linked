@@ -48,6 +48,8 @@ data class EventEntity(
         link = link,
         ownerByMe = ownerByMe,
         users = Users(UserPreview("")), //TODO: сделать правильно
+
+        likes = likeOwnerIds.size.toLong(),
     )
 
     companion object {

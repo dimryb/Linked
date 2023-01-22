@@ -19,6 +19,8 @@ data class Event(
     val link: String? = null,
     val ownerByMe: Boolean,
     val users: Users,
+
+    val likes: Long = 0,
 ) : FeedItem() {
     enum class EventType {
         OFFLINE,

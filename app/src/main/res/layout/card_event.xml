@@ -49,7 +49,7 @@
         tools:text="@sample/posts.json/data/published" />
 
     <TextView
-        android:id="@+id/EventLabel"
+        android:id="@+id/eventLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/common_spacing"
@@ -63,7 +63,7 @@
         app:layout_constraintVertical_bias="0.0"/>
 
     <TextView
-        android:id="@+id/EventType"
+        android:id="@+id/eventType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -71,7 +71,7 @@
         android:singleLine="true"
         android:textColor="?attr/colorControlNormal"
         app:layout_constraintBottom_toBottomOf="@+id/avatarImageView"
-        app:layout_constraintStart_toEndOf="@+id/EventLabel"
+        app:layout_constraintStart_toEndOf="@+id/eventLabel"
         app:layout_constraintTop_toBottomOf="@+id/publishedTextView"
         app:layout_constraintVertical_bias="0.0"
         tools:text="@sample/posts.json/data/eventType" />
@@ -94,7 +94,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="avatarImageView,publishedTextView,menuButton,EventType"
+        app:constraint_referenced_ids="avatarImageView,publishedTextView,menuButton,eventLabel"
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="80dp" />
 

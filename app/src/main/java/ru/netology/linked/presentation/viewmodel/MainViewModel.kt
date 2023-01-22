@@ -23,7 +23,7 @@ private val empty = Post(
     likedByMe = false,
     published = "",
     mentionedMe = false,
-    ownedByMe = false,
+    ownerByMe = false,
     users = Users(user = UserPreview(name = "")),
 )
 
@@ -199,5 +199,17 @@ class MainViewModel @Inject constructor(
                 _state.value = FeedModelState.Error
             }
         }
+    }
+
+    fun editEvent(event: Event) {
+
+    }
+
+    fun removeEventById(id: Long) {
+
+    }
+
+    fun likeEvent(event: Event) {
+
     }
 }

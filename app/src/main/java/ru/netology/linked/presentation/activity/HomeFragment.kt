@@ -30,32 +30,7 @@ class HomeFragment : Fragment() {
     private val binding: FragmentHomeBinding
         get() = _binding ?: throw RuntimeException("FragmentHomeBinding == null!")
 
-    private val adapter = FeedAdapter(object : OnInteractionListener {
-
-        override fun onLike(post: Post) {
-            if (authViewModel.authorized) {
-                viewModel.likePost(post)
-            } else {
-                authViewModel.signIn()
-            }
-        }
-
-        override fun onComment(post: Post, comment: String) {
-
-        }
-
-        override fun onDetails(post: Post) {
-
-        }
-
-        override fun onEdit(post: Post) {
-            viewModel.editPost(post)
-        }
-
-        override fun onRemove(post: Post) {
-            viewModel.removePostById(post.id)
-        }
-    })
+    lateinit var adapter: FeedAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,6 +42,12 @@ class HomeFragment : Fragment() {
             container,
             false
         )
+
+        adapter = FeedAdapter(
+            PostOnInteractionListener(authViewModel, viewModel),
+            EventOnInteractionListener(authViewModel, viewModel),
+        )
+
         binding.postsList.adapter = adapter
 
         observeViewModel()

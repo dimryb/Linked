@@ -30,32 +30,7 @@ class EventsFragment : Fragment() {
     private val binding: FragmentEventsBinding
         get() = _binding ?: throw RuntimeException("FragmentEventsBinding == null!")
 
-    private val adapter = FeedAdapter(object : OnInteractionListener {
-
-        override fun onLike(post: Post) {
-            if (authViewModel.authorized) {
-                viewModel.likePost(post)
-            } else {
-                authViewModel.signIn()
-            }
-        }
-
-        override fun onComment(post: Post, comment: String) {
-
-        }
-
-        override fun onDetails(post: Post) {
-
-        }
-
-        override fun onEdit(post: Post) {
-            viewModel.editPost(post)
-        }
-
-        override fun onRemove(post: Post) {
-            viewModel.removePostById(post.id)
-        }
-    })
+    private lateinit var adapter: FeedAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,6 +42,12 @@ class EventsFragment : Fragment() {
             container,
             false
         )
+
+        adapter = FeedAdapter(
+            PostOnInteractionListener(authViewModel, viewModel),
+            EventOnInteractionListener(authViewModel, viewModel),
+        )
+
         binding.postsList.adapter = adapter
 
         observeViewModel()
@@ -108,7 +89,7 @@ class EventsFragment : Fragment() {
         viewModel.menuChecked.observe(viewLifecycleOwner) { checked ->
             with(binding.panelMenuBottom) {
                 homeButton.isChecked = (checked == MenuChecked.HOME)
-                usersButton.isChecked = (checked== MenuChecked.USERS)
+                usersButton.isChecked = (checked == MenuChecked.USERS)
                 eventsButton.isChecked = (checked == MenuChecked.EVENTS)
             }
         }
@@ -140,9 +121,9 @@ class EventsFragment : Fragment() {
         }
     }
 
-    private fun menuNavigation(){
-        viewModel.menuAction.observe(viewLifecycleOwner){ action->
-            when(action){
+    private fun menuNavigation() {
+        viewModel.menuAction.observe(viewLifecycleOwner) { action ->
+            when (action) {
                 MenuAction.HOME -> {
 
                 }
