@@ -34,4 +34,8 @@
     <string name="media_image">Media image</string>
     <string name="Offline">Offline</string>
     <string name="Online">Online</string>
+    <string name="description_photo">Photo</string>
+    <string name="remove">Remove</string>
+    <string name="description_select_photo">Select photo</string>
+    <string name="description_take_photo">Take photo</string>
 </resources>
