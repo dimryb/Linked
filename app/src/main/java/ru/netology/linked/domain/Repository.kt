@@ -7,6 +7,7 @@ import ru.netology.linked.domain.dto.*
 interface Repository {
 
     val data: Flow<PagingData<FeedItem>>
+    val eventsDataPagingFlow: Flow<PagingData<FeedItem>>
 
     // Events
     suspend fun getEvents()

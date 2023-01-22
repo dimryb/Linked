@@ -2,20 +2,17 @@ package ru.netology.linked.presentation.viewmodel
 
 import androidx.lifecycle.*
 import androidx.paging.PagingData
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
-import ru.netology.linked.domain.Repository
-import ru.netology.linked.domain.dto.Post
-import ru.netology.linked.domain.dto.UserPreview
-import ru.netology.linked.domain.dto.Users
-import ru.netology.linked.presentation.util.SingleLiveEvent
-import javax.inject.Inject
 import androidx.paging.cachedIn
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
-import ru.netology.linked.domain.dto.FeedItem
+import kotlinx.coroutines.launch
+import ru.netology.linked.domain.Repository
+import ru.netology.linked.domain.dto.*
 import ru.netology.linked.presentation.auth.AppAuth
+import ru.netology.linked.presentation.util.SingleLiveEvent
+import javax.inject.Inject
 
 private val empty = Post(
     id = 0,
@@ -36,19 +33,30 @@ class MainViewModel @Inject constructor(
     private val appAuth: AppAuth,
 ) : ViewModel() {
 
-    private val cached = repository
+    private val cachedPosts = repository
         .data
         .cachedIn(viewModelScope)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val data: Flow<PagingData<FeedItem>> = appAuth.authStateFlow
-        .flatMapLatest { cached }
+        .flatMapLatest { cachedPosts }
+
+    private val cachedEvents = repository
+        .eventsDataPagingFlow
+        .cachedIn(viewModelScope)
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val dataEvens: Flow<PagingData<FeedItem>> = appAuth.authStateFlow
+        .flatMapLatest { cachedEvents }
 
     private val _state = MutableLiveData<FeedModelState>()
     val state: LiveData<FeedModelState>
         get() = _state
 
-    val menuState = MutableLiveData<MenuState>()
+    private val _menuState = MutableLiveData<MenuState>()
+    val menuState: LiveData<MenuState>
+        get() = _menuState
+
 
     val edited = MutableLiveData(empty)
     private val _postCreated = SingleLiveEvent<Unit>()
@@ -57,7 +65,26 @@ class MainViewModel @Inject constructor(
 
     init {
         getPosts()
-        menuState.value = MenuState()
+        _menuState.value = MenuState()
+    }
+
+    private fun setMenuState(state: MenuState){
+        _menuState.value = state
+    }
+
+    fun bottomMenuAction(state: MenuStateChecked) {
+        setMenuState(MenuState(state))
+        when (state) {
+            MenuStateChecked.HOME -> {
+                getPosts()
+            }
+            MenuStateChecked.USERS -> {
+                getUsers()
+            }
+            MenuStateChecked.EVENTS -> {
+                getEvents()
+            }
+        }
     }
 
     fun getPosts() {
@@ -129,6 +156,30 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 repository.likePost(post)
+                _state.value = FeedModelState.Idle
+            } catch (e: Exception) {
+                _state.value = FeedModelState.Error
+            }
+        }
+    }
+
+    fun getUsers() {
+        viewModelScope.launch {
+            _postCreated.value = Unit
+            try {
+                repository.getUsers()
+                _state.value = FeedModelState.Idle
+            } catch (e: Exception) {
+                _state.value = FeedModelState.Error
+            }
+        }
+    }
+
+    fun getEvents() {
+        viewModelScope.launch {
+            _postCreated.value = Unit
+            try {
+                repository.getEvents()
                 _state.value = FeedModelState.Idle
             } catch (e: Exception) {
                 _state.value = FeedModelState.Error

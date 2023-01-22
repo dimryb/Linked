@@ -81,10 +81,18 @@ class FeedFragment : Fragment() {
 //        }
 
         lifecycleScope.launchWhenCreated {
+            viewModel.dataEvens.collectLatest {
+                adapter.submitData(it)
+            }
+        }
+
+        lifecycleScope.launchWhenCreated {
             viewModel.data.collectLatest {
                 adapter.submitData(it)
             }
         }
+
+
 
         viewModel.edited.observe(viewLifecycleOwner) { edited ->
             if (edited.id == 0L) {
@@ -122,13 +130,13 @@ class FeedFragment : Fragment() {
 
         with(binding.panelMenuBottom) {
             homeButton.setOnClickListener {
-                viewModel.menuState.value = MenuState(MenuStateChecked.HOME)
+                viewModel.bottomMenuAction(MenuStateChecked.HOME)
             }
             usersButton.setOnClickListener {
-                viewModel.menuState.value = MenuState(MenuStateChecked.USERS)
+                viewModel.bottomMenuAction(MenuStateChecked.USERS)
             }
             eventsButton.setOnClickListener {
-                viewModel.menuState.value = MenuState(MenuStateChecked.EVENTS)
+                viewModel.bottomMenuAction(MenuStateChecked.EVENTS)
             }
             createPostButton.setOnClickListener {
                 if (authViewModel.authorized) {

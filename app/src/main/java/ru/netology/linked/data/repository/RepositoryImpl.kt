@@ -4,9 +4,11 @@ import androidx.paging.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import ru.netology.linked.data.api.ApiService
+import ru.netology.linked.data.dao.EventRemoteKeyDao
 import ru.netology.linked.data.dao.PostDao
 import ru.netology.linked.data.dao.PostRemoteKeyDao
 import ru.netology.linked.data.db.AppDb
+import ru.netology.linked.data.entity.EventEntity
 import ru.netology.linked.data.entity.PostEntity
 import ru.netology.linked.data.entity.toEntity
 import ru.netology.linked.data.error.ApiError
@@ -16,17 +18,17 @@ import ru.netology.linked.domain.Repository
 import ru.netology.linked.domain.dto.*
 import java.io.IOException
 import javax.inject.Inject
-import kotlin.random.Random
 
 class RepositoryImpl @Inject constructor(
     private val postDao: PostDao,
     private val apiService: ApiService,
     postRemoteKeyDao: PostRemoteKeyDao,
+    eventRemoteKeyDao: EventRemoteKeyDao,
     appDb: AppDb,
 ) : Repository {
 
     @OptIn(ExperimentalPagingApi::class)
-    override val data: Flow<PagingData<FeedItem>> = Pager(
+    override val data: Flow<PagingData<FeedItem>> = Pager<Int, PostEntity>(
         config = PagingConfig(pageSize = 10, enablePlaceholders = false),
         pagingSourceFactory = postDao::getPostsPagingSource,
         remoteMediator = PostRemoteMediator(
@@ -35,12 +37,39 @@ class RepositoryImpl @Inject constructor(
             postRemoteKeyDao = postRemoteKeyDao,
             appDb = appDb,
         )
-    ).flow.map { pagingData->
+    ).flow.map { pagingData ->
         pagingData.map(PostEntity::toDto)
     }
 
+    @OptIn(ExperimentalPagingApi::class)
+    override val eventsDataPagingFlow: Flow<PagingData<FeedItem>> = Pager<Int, EventEntity>(
+        config = PagingConfig(pageSize = 10, enablePlaceholders = false),
+        pagingSourceFactory = postDao::getEventsPagingSource,
+        remoteMediator = EventRemoteMediator(
+            service = apiService,
+            postDao = postDao,
+            eventRemoteKeyDao = eventRemoteKeyDao,
+            appDb = appDb,
+        )
+    ).flow.map { pagingData ->
+        pagingData.map(EventEntity::toDto)
+    }
+
     override suspend fun getEvents() {
-        TODO("Not yet implemented")
+        try {
+            val response = apiService.getEvents()
+            if (!response.isSuccessful) {
+                throw ApiError(response.code(), response.message())
+            }
+            val body = response.body() ?: throw ApiError(response.code(), response.message())
+            val events = body.toEntity()
+            postDao.insertEvents(events)
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw e
+            //throw UnknownError
+        }
     }
 
     override suspend fun setEvent(event: Event) {
@@ -197,7 +226,18 @@ class RepositoryImpl @Inject constructor(
     }
 
     override suspend fun getUsers() {
-        TODO("Not yet implemented")
+        try {
+            val response = apiService.getUsers()
+            if (!response.isSuccessful) {
+                throw ApiError(response.code(), response.message())
+            }
+            val body = response.body() ?: throw ApiError(response.code(), response.message())
+            postDao.insertUsers(body.toEntity())
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
     }
 
     override suspend fun getUser(userId: Long) {

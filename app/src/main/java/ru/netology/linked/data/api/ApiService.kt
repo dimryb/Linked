@@ -24,10 +24,16 @@ interface ApiService {
     suspend fun removeEvent(@Path("event_id") eventId: Long): Response<Unit>
 
     @GET("events/{event_id}/after/")
-    suspend fun getEventsAfter(@Query("count") count: Int, @Path("event_id") eventId: Long): Response<List<Event>>
+    suspend fun getEventsAfter(
+        @Path("event_id") eventId: Long,
+        @Query("count") count: Int
+    ): Response<List<Event>>
 
     @GET("events/{event_id}/before/")
-    suspend fun getEventsBefore(@Query("count") count: Int, @Path("event_id") eventId: Long): Response<List<Event>>
+    suspend fun getEventsBefore(
+        @Path("event_id") eventId: Long,
+        @Query("count") count: Int
+    ): Response<List<Event>>
 
     @POST("events/{event_id}/likes/")
     suspend fun likeEvent(@Path("event_id") eventId: Long): Response<Event>
