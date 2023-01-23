@@ -213,7 +213,7 @@ class MainViewModel @Inject constructor(
 
     fun getEvents() {
         viewModelScope.launch {
-            _postCreated.value = Unit
+            _eventCreated.value = Unit
             try {
                 repository.getEvents()
                 _state.value = FeedModelState.Idle
@@ -226,7 +226,7 @@ class MainViewModel @Inject constructor(
     fun saveEvent() {
         editedEvent.value?.let { event ->
             viewModelScope.launch {
-                _postCreated.value = Unit
+                _eventCreated.value = Unit
                 try {
                     repository.setEvent(event, _photo.value?.uri?.let { MediaUpload(it.toFile()) })
                     _state.value = FeedModelState.Idle

@@ -133,6 +133,7 @@ class HomeFragment : Fragment() {
                     } else {
                         authViewModel.signIn()
                     }
+                    viewModel.bottomMenuAction(MenuAction.IDLE)
                 }
                 else -> {}
             }

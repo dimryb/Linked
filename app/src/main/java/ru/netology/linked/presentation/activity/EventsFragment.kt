@@ -129,6 +129,7 @@ class EventsFragment : Fragment() {
                     } else {
                         authViewModel.signIn()
                     }
+                    viewModel.bottomMenuAction(MenuAction.IDLE)
                 }
                 else -> {}
             }

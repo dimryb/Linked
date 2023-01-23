@@ -81,7 +81,7 @@ class NewEventFragment : Fragment() {
 
     private fun observeViewModel() {
         viewModel.eventCreated.observe(viewLifecycleOwner) {
-            viewModel.navigationUp()
+            findNavController().navigateUp()
         }
 
         viewModel.photo.observe(viewLifecycleOwner) {
