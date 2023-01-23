@@ -7,6 +7,7 @@ import ru.netology.linked.R
 import ru.netology.linked.databinding.CardEventBinding
 import ru.netology.linked.domain.dto.AttachmentType
 import ru.netology.linked.domain.dto.Event
+import ru.netology.linked.domain.dto.EventType
 import ru.netology.linked.presentation.view.loadAuthorAvatar
 import ru.netology.linked.presentation.view.loadImageMedia
 
@@ -27,7 +28,7 @@ class EventViewHolder(
             postTextView.text = event.content
             likesButton.text = event.likes.toString()
             likesButton.isChecked = event.likedByMe
-            eventType.text = if (event.type == Event.EventType.OFFLINE) {
+            eventType.text = if (event.type == EventType.OFFLINE) {
                 binding.root.context.getString(R.string.Offline)
             } else {
                 binding.root.context.getString(R.string.Online)

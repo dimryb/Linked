@@ -29,14 +29,26 @@
     <fragment
         android:id="@+id/eventsFragment"
         android:name="ru.netology.linked.presentation.activity.EventsFragment"
-        android:label="EventsFragment" />
+        android:label="EventsFragment"
+        tools:layout="@layout/fragment_events">
+        <action
+            android:id="@+id/action_eventsFragment_to_newEventFragment"
+            app:destination="@id/newEventFragment" />
+    </fragment>
     <fragment
         android:id="@+id/signUpFragment"
         android:name="ru.netology.linked.presentation.activity.SignUpFragment"
-        android:label="SignUpFragment" />
+        android:label="SignUpFragment"
+        tools:layout="@layout/fragment_sign_up"/>
     <fragment
         android:id="@+id/signInFragment"
         android:name="ru.netology.linked.presentation.activity.SignInFragment"
-        android:label="SignInFragment" />
+        android:label="SignInFragment"
+        tools:layout="@layout/fragment_sign_in"/>
+    <fragment
+        android:id="@+id/newEventFragment"
+        android:name="ru.netology.linked.presentation.activity.NewEventFragment"
+        android:label="fragment_new_event"
+        tools:layout="@layout/fragment_new_event" />
 
 </navigation>

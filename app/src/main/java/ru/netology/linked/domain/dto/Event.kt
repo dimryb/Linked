@@ -22,8 +22,5 @@ data class Event(
 
     val likes: Long = 0,
 ) : FeedItem() {
-    enum class EventType {
-        OFFLINE,
-        ONLINE,
-    }
+
 }

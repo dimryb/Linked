@@ -69,17 +69,29 @@ class RepositoryImpl @Inject constructor(
         } catch (e: IOException) {
             throw NetworkError
         } catch (e: Exception) {
-            throw e
-            //throw UnknownError
+            throw UnknownError
         }
     }
 
     override suspend fun setEvent(event: Event, upload: MediaUpload?) {
-        TODO("Not yet implemented")
-    }
+        try {
+            val eventWithAttachment = upload?.let {
+                saveMedia(it)
+            }?.let {
+                event.copy(attachment = Attachment(it.url, AttachmentType.IMAGE))
+            }
+            val response = apiService.setEvent((eventWithAttachment ?: event).toCreate())
+            if (!response.isSuccessful) {
+                throw ApiError(response.code(), response.message())
+            }
 
-    override suspend fun getEventsLatest(count: Int) {
-        TODO("Not yet implemented")
+            val body = response.body() ?: throw ApiError(response.code(), response.message())
+            postDao.insertEvent(EventEntity.fromDto(body))
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
     }
 
     override suspend fun getEvent(eventId: Long) {
@@ -87,14 +99,6 @@ class RepositoryImpl @Inject constructor(
     }
 
     override suspend fun removeEvent(eventId: Long) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getEventsAfter(count: Int, eventId: Long) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getEventsBefore(count: Int, eventId: Long) {
         TODO("Not yet implemented")
     }
 
@@ -140,18 +144,6 @@ class RepositoryImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override suspend fun getMyWallLatest(count: Int) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getMyWallAfter(count: Int, postId: Long) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getMyWallBefore(count: Int, postId: Long) {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun getMyWallNewer(postId: Long) {
         TODO("Not yet implemented")
     }
@@ -192,10 +184,6 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getPostsLatest(count: Int) {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun getPost(postId: Long) {
         TODO("Not yet implemented")
     }
@@ -212,14 +200,6 @@ class RepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             throw UnknownError
         }
-    }
-
-    override suspend fun getPostsAfter(count: Int, postId: Long) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getPostsBefore(count: Int, postId: Long) {
-        TODO("Not yet implemented")
     }
 
     override suspend fun likePost(post: Post) {
@@ -263,18 +243,6 @@ class RepositoryImpl @Inject constructor(
     }
 
     override suspend fun getWall(authorId: Long) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getWallLatest(authorId: Long, count: Int) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getWallAfter(authorId: Long, count: Int, postId: Long) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getWallBefore(authorId: Long, count: Int, postId: Long) {
         TODO("Not yet implemented")
     }
 

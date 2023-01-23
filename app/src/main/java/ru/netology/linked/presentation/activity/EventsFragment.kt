@@ -62,11 +62,11 @@ class EventsFragment : Fragment() {
             }
         }
 
-        viewModel.editedPost.observe(viewLifecycleOwner) { edited ->
+        viewModel.editedEvent.observe(viewLifecycleOwner) { edited ->
             if (edited.id == 0L) {
                 return@observe
             }
-            launchEditPost()
+            launchEditEvent()
         }
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
@@ -106,11 +106,7 @@ class EventsFragment : Fragment() {
                 viewModel.bottomMenuAction(MenuAction.EVENTS)
             }
             createPostButton.setOnClickListener {
-//                if (authViewModel.authorized) {
-//                    findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
-//                } else {
-//                    authViewModel.signIn()
-//                }
+                viewModel.bottomMenuAction(MenuAction.ADD)
             }
         }
     }
@@ -128,7 +124,11 @@ class EventsFragment : Fragment() {
 
                 }
                 MenuAction.ADD -> {
-
+                    if (authViewModel.authorized) {
+                        findNavController().navigate(R.id.action_eventsFragment_to_newEventFragment)
+                    } else {
+                        authViewModel.signIn()
+                    }
                 }
                 else -> {}
             }
@@ -140,12 +140,12 @@ class EventsFragment : Fragment() {
         _binding = null
     }
 
-    private fun launchEditPost() {
+    private fun launchEditEvent() {
         findNavController()
             .navigate(
-                R.id.action_homeFragment_to_newPostFragment,
+                R.id.action_eventsFragment_to_newEventFragment,
                 Bundle().apply {
-                    viewModel.editedPost.value?.content.let {
+                    viewModel.editedEvent.value?.content.let {
                         textArg = it
                     }
                 }

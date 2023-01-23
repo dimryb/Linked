@@ -18,7 +18,7 @@ data class EventEntity(
     val published: String,
     @Embedded
     val coords: Coordinates? = null,
-    val eventType: Event.EventType,
+    val eventType: EventType,
     val likeOwnerIds: List<Long> = emptyList(),
     val likedByMe: Boolean,
     val speakerIds: List<Long> = emptyList(),

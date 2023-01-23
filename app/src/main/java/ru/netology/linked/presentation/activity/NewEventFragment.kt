@@ -9,6 +9,7 @@ import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.github.dhaval2404.imagepicker.ImagePicker
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.linked.R
@@ -51,7 +52,10 @@ class NewEventFragment : Fragment() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean =
                 when (menuItem.itemId) {
                     R.id.save -> {
-                        viewModel.editEventContent(binding.contentEditText.text.toString())
+                        viewModel.editEventContent(
+                            binding.contentEditText.text.toString(),
+                            "2023-01-25T18:11:15.338754Z"
+                        )
                         viewModel.saveEvent()
                         AndroidUtils.hideKeyboard(requireView())
                         true

@@ -36,7 +36,7 @@ private val emptyEvent = Event(
     content = "",
     datetime = "",
     published = "",
-    type = Event.EventType.OFFLINE,
+    type = EventType.OFFLINE,
     likedByMe = false,
     participatedByMe = false,
     ownerByMe = false,
@@ -243,14 +243,14 @@ class MainViewModel @Inject constructor(
         editedEvent.value = event
     }
 
-    fun editEventContent(content: String) {
+    fun editEventContent(content: String, dateTime: String) {
         val value = editedEvent.value
         value?.let {
             val text = content.trim()
             if (it.content == text) {
                 return
             }
-            editedEvent.value = it.copy(content = text)
+            editedEvent.value = it.copy(content = text, datetime = dateTime)
         }
     }
 
