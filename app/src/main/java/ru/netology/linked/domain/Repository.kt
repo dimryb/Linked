@@ -17,7 +17,7 @@ interface Repository {
     suspend fun removeEvent(eventId: Long)
     suspend fun getEventsAfter(count: Int, eventId: Long)
     suspend fun getEventsBefore(count: Int, eventId: Long)
-    suspend fun likeEvent(eventId: Long)
+    suspend fun likeEvent(event: Event)
     suspend fun getEventsNewer(eventId: Long)
     suspend fun getEventParticipants(eventId: Long)
 

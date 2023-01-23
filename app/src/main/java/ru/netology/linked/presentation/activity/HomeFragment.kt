@@ -14,10 +14,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import ru.netology.linked.R
 import ru.netology.linked.databinding.FragmentHomeBinding
-import ru.netology.linked.domain.dto.Post
 import ru.netology.linked.presentation.activity.NewPostFragment.Companion.textArg
 import ru.netology.linked.presentation.adapter.FeedAdapter
-import ru.netology.linked.presentation.viewholder.OnInteractionListener
 import ru.netology.linked.presentation.viewmodel.*
 
 @AndroidEntryPoint
@@ -68,7 +66,7 @@ class HomeFragment : Fragment() {
             }
         }
 
-        viewModel.edited.observe(viewLifecycleOwner) { edited ->
+        viewModel.editedPost.observe(viewLifecycleOwner) { edited ->
             if (edited.id == 0L) {
                 return@observe
             }
@@ -151,7 +149,7 @@ class HomeFragment : Fragment() {
             .navigate(
                 R.id.action_homeFragment_to_newPostFragment,
                 Bundle().apply {
-                    viewModel.edited.value?.content.let {
+                    viewModel.editedPost.value?.content.let {
                         textArg = it
                     }
                 }

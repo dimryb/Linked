@@ -98,7 +98,7 @@ class RepositoryImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override suspend fun likeEvent(eventId: Long) {
+    override suspend fun likeEvent(event: Event) {
         TODO("Not yet implemented")
     }
 

@@ -16,7 +16,7 @@ import ru.netology.linked.presentation.auth.AppAuth
 import ru.netology.linked.presentation.util.SingleLiveEvent
 import javax.inject.Inject
 
-private val empty = Post(
+private val emptyPost = Post(
     id = 0,
     content = "",
     author = "",
@@ -26,6 +26,20 @@ private val empty = Post(
     published = "",
     mentionedMe = false,
     ownedByMe = false,
+    users = emptyMap(),
+)
+
+private val emptyEvent = Event(
+    id = 0,
+    authorId = 0,
+    author = "",
+    content = "",
+    datetime = "",
+    published = "",
+    type = Event.EventType.OFFLINE,
+    likedByMe = false,
+    participatedByMe = false,
+    ownerByMe = false,
     users = emptyMap(),
 )
 
@@ -65,10 +79,15 @@ class MainViewModel @Inject constructor(
     val menuAction: LiveData<MenuAction>
         get() = _menuAction
 
-    val edited = MutableLiveData(empty)
+    val editedPost = MutableLiveData(emptyPost)
     private val _postCreated = SingleLiveEvent<Unit>()
     val postCreated: LiveData<Unit>
         get() = _postCreated
+
+    val editedEvent = MutableLiveData(emptyEvent)
+    private val _eventCreated = SingleLiveEvent<Unit>()
+    val eventCreated: LiveData<Unit>
+        get() = _eventCreated
 
     private val _photo = MutableLiveData<PhotoModel?>(null)
     val photo: LiveData<PhotoModel?>
@@ -126,7 +145,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun savePost() {
-        edited.value?.let { post ->
+        editedPost.value?.let { post ->
             viewModelScope.launch {
                 _postCreated.value = Unit
                 try {
@@ -137,22 +156,22 @@ class MainViewModel @Inject constructor(
                 }
             }
         }
-        edited.value = empty
+        editedPost.value = emptyPost
         _photo.value = noPhoto
     }
 
     fun editPost(post: Post) {
-        edited.value = post
+        editedPost.value = post
     }
 
-    fun editContent(content: String) {
-        val value = edited.value
+    fun editPostContent(content: String) {
+        val value = editedPost.value
         value?.let {
             val text = content.trim()
             if (it.content == text) {
                 return
             }
-            edited.value = it.copy(content = text)
+            editedPost.value = it.copy(content = text)
         }
     }
 
@@ -190,17 +209,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun getUsers() {
-        viewModelScope.launch {
-            _postCreated.value = Unit
-            try {
-                repository.getUsers()
-                _state.value = FeedModelState.Idle
-            } catch (e: Exception) {
-                _state.value = FeedModelState.Error
-            }
-        }
-    }
+    //events
 
     fun getEvents() {
         viewModelScope.launch {
@@ -214,16 +223,82 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun editEvent(event: Event) {
-
+    fun saveEvent() {
+        editedEvent.value?.let { event ->
+            viewModelScope.launch {
+                _postCreated.value = Unit
+                try {
+                    repository.setEvent(event, _photo.value?.uri?.let { MediaUpload(it.toFile()) })
+                    _state.value = FeedModelState.Idle
+                } catch (e: Exception) {
+                    _state.value = FeedModelState.Error
+                }
+            }
+        }
+        editedPost.value = emptyPost
+        _photo.value = noPhoto
     }
 
-    fun removeEventById(id: Long) {
+    fun editEvent(event: Event) {
+        editedEvent.value = event
+    }
 
+    fun editEventContent(content: String) {
+        val value = editedEvent.value
+        value?.let {
+            val text = content.trim()
+            if (it.content == text) {
+                return
+            }
+            editedEvent.value = it.copy(content = text)
+        }
+    }
+
+    fun removeEventById(eventId: Long) {
+        viewModelScope.launch {
+            try {
+                repository.removeEvent(eventId)
+                _state.value = FeedModelState.Idle
+            } catch (e: Exception) {
+                _state.value = FeedModelState.Error
+            }
+        }
+    }
+
+    fun refreshEvent() {
+        viewModelScope.launch {
+            _state.value = FeedModelState.Refresh
+            try {
+                repository.getPosts()
+                _state.value = FeedModelState.Idle
+            } catch (e: Exception) {
+                _state.value = FeedModelState.Error
+            }
+        }
     }
 
     fun likeEvent(event: Event) {
+        viewModelScope.launch {
+            try {
+                repository.likeEvent(event)
+                _state.value = FeedModelState.Idle
+            } catch (e: Exception) {
+                _state.value = FeedModelState.Error
+            }
+        }
+    }
 
+    // user
+    fun getUsers() {
+        viewModelScope.launch {
+            _postCreated.value = Unit
+            try {
+                repository.getUsers()
+                _state.value = FeedModelState.Idle
+            } catch (e: Exception) {
+                _state.value = FeedModelState.Error
+            }
+        }
     }
 
     fun changePhoto(uri: Uri?) {
