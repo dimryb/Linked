@@ -18,7 +18,7 @@ data class EventEntity(
     val published: String,
     @Embedded
     val coords: Coordinates? = null,
-    //val type: Event.EventType,
+    val eventType: Event.EventType,
     val likeOwnerIds: List<Long> = emptyList(),
     val likedByMe: Boolean,
     val speakerIds: List<Long> = emptyList(),
@@ -27,7 +27,7 @@ data class EventEntity(
     val attachment: Attachment? = null,
     val link: String? = null,
     val ownerByMe: Boolean,
-    //val users: Users,
+    val users: Map<Long, UserPreview>,
 ) {
     fun toDto(): Event = Event(
         id = id,
@@ -39,7 +39,7 @@ data class EventEntity(
         datetime = dateTime,
         published = published,
         coords = coords,
-        type = Event.EventType.OFFLINE, //TODO: сделать правильно
+        type = eventType,
         likeOwnerIds = likeOwnerIds,
         likedByMe = likedByMe,
         speakerIds = speakerIds,
@@ -47,7 +47,7 @@ data class EventEntity(
         attachment = attachment,
         link = link,
         ownerByMe = ownerByMe,
-        users = Users(UserPreview("")), //TODO: сделать правильно
+        users = users,
 
         likes = likeOwnerIds.size.toLong(),
     )
@@ -65,7 +65,7 @@ data class EventEntity(
                     dateTime = datetime,
                     published = published,
                     coords = coords,
-                    //type = type, //TODO: сделать правильно
+                    eventType = type,
                     likeOwnerIds = likeOwnerIds,
                     likedByMe = likedByMe,
                     speakerIds = speakerIds,
@@ -73,7 +73,7 @@ data class EventEntity(
                     attachment = attachment,
                     link = link,
                     ownerByMe = ownerByMe,
-                    //users = users, //TODO: сделать правильно
+                    users = users,
                 )
             }
     }

@@ -16,7 +16,7 @@ data class Post(
     val likedByMe: Boolean,
     val attachment: Attachment? = null,
     val ownedByMe: Boolean,
-    val users: Users,
+    val users: Map<Long, UserPreview>,
 
     val likes: Long = 0,
 ) : FeedItem()

@@ -26,7 +26,7 @@ private val empty = Post(
     published = "",
     mentionedMe = false,
     ownedByMe = false,
-    users = Users(user = UserPreview(name = "")),
+    users = emptyMap(),
 )
 
 private val noPhoto = PhotoModel()

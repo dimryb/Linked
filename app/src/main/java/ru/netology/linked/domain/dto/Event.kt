@@ -18,7 +18,7 @@ data class Event(
     val attachment: Attachment? = null,
     val link: String? = null,
     val ownerByMe: Boolean,
-    val users: Users,
+    val users: Map<Long, UserPreview>,
 
     val likes: Long = 0,
 ) : FeedItem() {

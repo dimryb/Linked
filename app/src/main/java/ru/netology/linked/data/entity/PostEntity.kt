@@ -17,14 +17,13 @@ data class PostEntity(
     val coords: Coordinates?,
     val link: String?,
     val likeOwnerIds: List<Long> = emptyList(),
-//    @Embedded
-//    val mentionIds: List<Long>?, //TODO: сделать правильно
+    val mentionIds: List<Long>,
     val mentionedMe: Boolean,
     val likedByMe: Boolean,
     @Embedded
     val attachment: Attachment?,
     val ownedByMe: Boolean,
-    //val users: Users, //TODO: сделать правильно
+    val users: Map<Long, UserPreview>,
 ) {
     fun toDto(): Post = Post(
         id = id,
@@ -37,12 +36,12 @@ data class PostEntity(
         coords = coords,
         link = link,
         likeOwnerIds = likeOwnerIds,
-//        mentionIds = mentionIds, //TODO: сделать правильно
+        mentionIds = mentionIds,
         mentionedMe = mentionedMe,
         likedByMe = likedByMe,
         attachment = attachment,
         ownedByMe = ownedByMe,
-        users = Users(UserPreview("")),
+        users = users,
 
         likes = likeOwnerIds.size.toLong(),
     )
@@ -61,12 +60,12 @@ data class PostEntity(
                     coords = coords,
                     link = link,
                     likeOwnerIds = likeOwnerIds,
-                    //mentionIds = mentionIds, //TODO: сделать правильно
+                    mentionIds = mentionIds,
                     mentionedMe = mentionedMe,
                     likedByMe = likedByMe,
                     attachment = attachment,
                     ownedByMe = ownedByMe,
-                    //users = users, //TODO: сделать правильно
+                    users = users,
                 )
             }
     }
