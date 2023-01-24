@@ -12,4 +12,6 @@
     <dimen name="icon_button_min_height">@dimen/icon_button_min_size</dimen>
     <dimen name="icon_button_min_width">88dp</dimen>
     <dimen name="panel_button_height">57dp</dimen>
+    <dimen name="user_card_avatar_size">120dp</dimen>
+    <dimen name="big_login_text_size">20sp</dimen>
 </resources>
