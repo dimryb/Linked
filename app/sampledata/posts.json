@@ -8,5 +8,12 @@
 			"content": "Это демо пост в социальной сети Linked новый",
 			"eventType": "Онлайн"
 		}
+	],
+	"user": [
+		{
+			"id": 1,
+			"author": "User",
+			"login": "Login"
+		}
 	]
 }
