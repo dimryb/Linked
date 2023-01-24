@@ -6,9 +6,11 @@ import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.netology.linked.domain.Repository
 import ru.netology.linked.domain.dto.*
@@ -66,6 +68,8 @@ class MainViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     val dataEvens: Flow<PagingData<FeedItem>> = appAuth.authStateFlow
         .flatMapLatest { cachedEvents }
+
+    val usersData: LiveData<List<User>> = repository.usersDataFlow.asLiveData(Dispatchers.Default)
 
     private val _state = MutableLiveData<FeedModelState>()
     val state: LiveData<FeedModelState>

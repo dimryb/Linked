@@ -8,6 +8,7 @@ interface Repository {
 
     val data: Flow<PagingData<FeedItem>>
     val eventsDataPagingFlow: Flow<PagingData<FeedItem>>
+    val usersDataFlow: Flow<List<User>>
 
     // Events
     suspend fun getEvents()

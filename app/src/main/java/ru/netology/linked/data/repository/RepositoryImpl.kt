@@ -2,6 +2,7 @@ package ru.netology.linked.data.repository
 
 import androidx.paging.*
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.map
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -56,6 +57,10 @@ class RepositoryImpl @Inject constructor(
     ).flow.map { pagingData ->
         pagingData.map(EventEntity::toDto)
     }
+
+    private val _usersDataFlow = MutableSharedFlow<List<User>>(replay = 1)
+    override val usersDataFlow: Flow<List<User>>
+        get() = _usersDataFlow
 
     override suspend fun getEvents() {
         try {
