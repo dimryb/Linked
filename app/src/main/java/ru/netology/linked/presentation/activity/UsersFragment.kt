@@ -35,6 +35,8 @@ class UsersFragment : Fragment() {
         setupListeners()
         menuNavigation()
 
+        binding.panelMenuBottom.createPostButton.isEnabled = false
+
         return binding.root
     }
 
@@ -60,9 +62,6 @@ class UsersFragment : Fragment() {
             eventsButton.setOnClickListener {
                 viewModel.bottomMenuAction(MenuAction.EVENTS)
             }
-            createPostButton.setOnClickListener {
-                viewModel.bottomMenuAction(MenuAction.ADD)
-            }
         }
     }
 
@@ -83,10 +82,6 @@ class UsersFragment : Fragment() {
                 else -> {}
             }
         }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
     }
 
     override fun onDestroyView() {
