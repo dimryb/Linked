@@ -16,6 +16,8 @@ import ru.netology.linked.databinding.FragmentNewEventBinding
 import ru.netology.linked.presentation.viewmodel.AuthViewModel
 import ru.netology.linked.presentation.viewmodel.MainViewModel
 import ru.netology.nmedia.util.AndroidUtils
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @AndroidEntryPoint
 class NewEventFragment : Fragment() {
@@ -51,9 +53,11 @@ class NewEventFragment : Fragment() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean =
                 when (menuItem.itemId) {
                     R.id.save -> {
+                        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                        val datetime = LocalDateTime.now().format(formatter)
                         viewModel.editEventContent(
                             binding.contentEditText.text.toString(),
-                            "2023-01-25T18:11:15.338754Z",
+                            datetime,
                             binding.onlineSwitch.isChecked
                         )
                         viewModel.saveEvent()
@@ -71,9 +75,6 @@ class NewEventFragment : Fragment() {
             false
         )
 
-        arguments?.textArg?.let(binding.contentEditText::setText)
-        arguments?.typeArg?.let(binding.onlineSwitch::setChecked)
-
         viewModel.isEditedFragment = true
         setupClickListeners()
         observeViewModel()
@@ -82,12 +83,15 @@ class NewEventFragment : Fragment() {
     }
 
     private fun observeViewModel() {
+        arguments?.textArg?.let(binding.contentEditText::setText)
+        arguments?.typeArg?.let(binding.onlineSwitch::setChecked)
+
         viewModel.eventCreated.observe(viewLifecycleOwner) {
             viewModel.navigationUp()
         }
 
         viewModel.photo.observe(viewLifecycleOwner) {
-            binding.photoLayout.isVisible = it != null
+            binding.photoLayout.isVisible = (it != null) && (it.uri != null)
             binding.photo.setImageURI(it?.uri)
         }
     }

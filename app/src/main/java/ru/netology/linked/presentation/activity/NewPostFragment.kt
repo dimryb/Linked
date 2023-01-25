@@ -82,7 +82,7 @@ class NewPostFragment : Fragment() {
         }
 
         viewModel.photo.observe(viewLifecycleOwner) {
-            binding.photoLayout.isVisible = it != null
+            binding.photoLayout.isVisible = (it != null) && (it.uri != null)
             binding.photo.setImageURI(it?.uri)
         }
     }
