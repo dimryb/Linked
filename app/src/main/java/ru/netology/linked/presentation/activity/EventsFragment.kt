@@ -74,7 +74,7 @@ class EventsFragment : Fragment() {
             if (state is FeedModelState.Error) {
                 Snackbar.make(binding.root, "Error", Snackbar.LENGTH_LONG)
                     .setAction(R.string.retry_loading) {
-                        viewModel.refreshPost()
+                        viewModel.refreshEvent()
                     }.show()
             }
             binding.swipeRefresh.isRefreshing = state is FeedModelState.Refresh
