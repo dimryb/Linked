@@ -72,6 +72,7 @@ class NewEventFragment : Fragment() {
 
         arguments?.textArg?.let(binding.contentEditText::setText)
 
+        viewModel.isEditedFragment = true
         setupClickListeners()
         observeViewModel()
 
@@ -111,6 +112,7 @@ class NewEventFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+        viewModel.isEditedFragment = false
         _binding = null
     }
 

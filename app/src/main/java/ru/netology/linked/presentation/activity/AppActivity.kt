@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.MenuProvider
 import androidx.navigation.NavController
@@ -65,7 +66,12 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
                             true
                         }
                         R.id.logout -> {
-                            authViewModel.signOut()
+                            if (mainViewModel.isEditedFragment) {
+                                Toast.makeText(this@AppActivity, "Logout blocked", Toast.LENGTH_LONG)
+                                    .show()
+                            } else {
+                                authViewModel.signOut()
+                            }
                             true
                         }
                         else -> false

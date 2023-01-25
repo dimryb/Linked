@@ -96,6 +96,8 @@ class MainViewModel @Inject constructor(
     val photo: LiveData<PhotoModel?>
         get() = _photo
 
+    var isEditedFragment = false
+
     init {
         getPosts()
     }
