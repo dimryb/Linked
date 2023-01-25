@@ -305,6 +305,18 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun refreshUsers() {
+        viewModelScope.launch {
+            _state.value = FeedModelState.Refresh
+            try {
+                repository.getUsers()
+                _state.value = FeedModelState.Idle
+            } catch (e: Exception) {
+                _state.value = FeedModelState.Error
+            }
+        }
+    }
+
     fun changePhoto(uri: Uri?) {
         _photo.value = PhotoModel(uri)
     }

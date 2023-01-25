@@ -92,7 +92,7 @@ class EventsFragment : Fragment() {
     private fun setupListeners() {
 
         binding.swipeRefresh.setOnRefreshListener {
-            viewModel.refreshPost()
+            viewModel.refreshEvent()
         }
 
         with(binding.panelMenuBottom) {

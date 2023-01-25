@@ -101,7 +101,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
                     navController.navigate(R.id.homeFragment)
                 }
                 MenuAction.USERS -> {
-
+                    navController.navigate(R.id.usersFragment)
                 }
                 MenuAction.EVENTS -> {
                     navController.navigate(R.id.eventsFragment)
