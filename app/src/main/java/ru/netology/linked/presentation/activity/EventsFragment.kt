@@ -14,6 +14,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import ru.netology.linked.R
 import ru.netology.linked.databinding.FragmentEventsBinding
+import ru.netology.linked.domain.dto.EventType
+import ru.netology.linked.presentation.activity.NewEventFragment.Companion.typeArg
 import ru.netology.linked.presentation.activity.NewPostFragment.Companion.textArg
 import ru.netology.linked.presentation.adapter.FeedAdapter
 import ru.netology.linked.presentation.viewmodel.*
@@ -146,8 +148,9 @@ class EventsFragment : Fragment() {
             .navigate(
                 R.id.action_eventsFragment_to_newEventFragment,
                 Bundle().apply {
-                    viewModel.editedEvent.value?.content.let {
-                        textArg = it
+                    viewModel.editedEvent.value?.let {
+                        textArg = it.content
+                        typeArg = (it.type == EventType.ONLINE)
                     }
                 }
             )

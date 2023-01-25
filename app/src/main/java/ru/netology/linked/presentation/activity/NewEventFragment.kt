@@ -53,7 +53,8 @@ class NewEventFragment : Fragment() {
                     R.id.save -> {
                         viewModel.editEventContent(
                             binding.contentEditText.text.toString(),
-                            "2023-01-25T18:11:15.338754Z"
+                            "2023-01-25T18:11:15.338754Z",
+                            binding.onlineSwitch.isChecked
                         )
                         viewModel.saveEvent()
                         AndroidUtils.hideKeyboard(requireView())
@@ -71,6 +72,7 @@ class NewEventFragment : Fragment() {
         )
 
         arguments?.textArg?.let(binding.contentEditText::setText)
+        arguments?.typeArg?.let(binding.onlineSwitch::setChecked)
 
         viewModel.isEditedFragment = true
         setupClickListeners()
@@ -121,5 +123,10 @@ class NewEventFragment : Fragment() {
         var Bundle.textArg: String?
             set(value) = putString(TEXT_KEY, value)
             get() = getString(TEXT_KEY)
+
+        private const val TYPE_KEY = "TYPE_KEY"
+        var Bundle.typeArg: Boolean?
+            set(value) = putBoolean(TYPE_KEY, value ?: false)
+            get() = getBoolean(TYPE_KEY)
     }
 }

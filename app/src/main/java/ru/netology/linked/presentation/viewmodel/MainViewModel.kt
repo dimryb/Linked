@@ -52,21 +52,15 @@ class MainViewModel @Inject constructor(
     appAuth: AppAuth,
 ) : ViewModel() {
 
-    private val cachedPosts = repository
-        .data
-        .cachedIn(viewModelScope)
+    private val cachedPosts = repository.data.cachedIn(viewModelScope)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val data: Flow<PagingData<FeedItem>> = appAuth.authStateFlow
-        .flatMapLatest { cachedPosts }
+    val data: Flow<PagingData<FeedItem>> = appAuth.authStateFlow.flatMapLatest { cachedPosts }
 
-    private val cachedEvents = repository
-        .eventsDataPagingFlow
-        .cachedIn(viewModelScope)
+    private val cachedEvents = repository.eventsDataPagingFlow.cachedIn(viewModelScope)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val dataEvens: Flow<PagingData<FeedItem>> = appAuth.authStateFlow
-        .flatMapLatest { cachedEvents }
+    val dataEvens: Flow<PagingData<FeedItem>> = appAuth.authStateFlow.flatMapLatest { cachedEvents }
 
     val usersData: LiveData<List<User>> = repository.usersDataFlow.asLiveData(Dispatchers.Default)
 
@@ -248,14 +242,17 @@ class MainViewModel @Inject constructor(
         editedEvent.value = event
     }
 
-    fun editEventContent(content: String, dateTime: String) {
+    fun editEventContent(content: String, dateTime: String, online: Boolean) {
         val value = editedEvent.value
         value?.let {
             val text = content.trim()
-            if (it.content == text) {
+            val type = if (online) EventType.ONLINE else EventType.OFFLINE
+            if ((it.content == text) && (it.type == type) && (it.datetime == dateTime)) {
                 return
             }
-            editedEvent.value = it.copy(content = text, datetime = dateTime)
+            editedEvent.value = it.copy(
+                content = text, datetime = dateTime, type = type
+            )
         }
     }
 
