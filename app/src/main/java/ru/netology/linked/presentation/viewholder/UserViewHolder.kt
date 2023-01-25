@@ -12,7 +12,6 @@ class UserViewHolder(
 
     fun bind(user: User) {
         setContent(user)
-        setupClickListeners(user)
     }
 
     private fun setContent(user: User) {
@@ -26,9 +25,5 @@ class UserViewHolder(
                 avatarUserImageView.setImageResource(R.drawable.posts_avatars)
             }
         }
-    }
-
-    private fun setupClickListeners(user: User) {
-
     }
 }

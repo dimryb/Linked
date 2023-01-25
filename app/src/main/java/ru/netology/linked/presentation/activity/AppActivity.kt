@@ -81,7 +81,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
     private fun authNavigation(navController: NavController) {
         authViewModel.token.observe(this) { token ->
             println("Token ${token.id} ${token.token}")
-            appAuth.setAuth(token.id, token.token ?: "")
+            appAuth.setAuth(token.id, token.token)
             navController.navigateUp()
         }
 
