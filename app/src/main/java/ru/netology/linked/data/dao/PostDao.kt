@@ -51,6 +51,9 @@ interface PostDao {
         if (post.id == 0L) insertPost(post) else updateContentPostById(post.id, post.content)
 
     //users
+    @Query("SELECT * FROM UserEntity ORDER BY id DESC")
+    fun getUsers(): Flow<List<UserEntity>>
+
     @Insert(onConflict = REPLACE)
     suspend fun insertUser(user: UserEntity)
 

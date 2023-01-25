@@ -1,9 +1,12 @@
 package ru.netology.linked.data.repository
 
 import androidx.paging.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import okhttp3.Dispatcher
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import ru.netology.linked.data.api.ApiService
@@ -11,9 +14,7 @@ import ru.netology.linked.data.dao.EventRemoteKeyDao
 import ru.netology.linked.data.dao.PostDao
 import ru.netology.linked.data.dao.PostRemoteKeyDao
 import ru.netology.linked.data.db.AppDb
-import ru.netology.linked.data.entity.EventEntity
-import ru.netology.linked.data.entity.PostEntity
-import ru.netology.linked.data.entity.toEntity
+import ru.netology.linked.data.entity.*
 import ru.netology.linked.data.error.ApiError
 import ru.netology.linked.data.error.NetworkError
 import ru.netology.linked.data.error.UnknownError
@@ -58,9 +59,10 @@ class RepositoryImpl @Inject constructor(
         pagingData.map(EventEntity::toDto)
     }
 
-    private val _usersDataFlow = MutableSharedFlow<List<User>>(replay = 1)
-    override val usersDataFlow: Flow<List<User>>
-        get() = _usersDataFlow
+    override val usersDataFlow: Flow<List<User>> =
+        postDao.getUsers().map(List<UserEntity>::toDto).flowOn(
+            Dispatchers.Default
+        )
 
     override suspend fun getEvents() {
         try {
