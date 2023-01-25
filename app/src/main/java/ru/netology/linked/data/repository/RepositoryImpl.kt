@@ -3,10 +3,8 @@ package ru.netology.linked.data.repository
 import androidx.paging.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import okhttp3.Dispatcher
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import ru.netology.linked.data.api.ApiService
@@ -101,24 +99,35 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getEvent(eventId: Long) {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun removeEvent(eventId: Long) {
-        TODO("Not yet implemented")
+        try {
+            val response = apiService.removeEvent(eventId)
+            if (!response.isSuccessful) {
+                throw ApiError(response.code(), response.message())
+            }
+            postDao.removeEvent(eventId)
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
     }
 
     override suspend fun likeEvent(event: Event) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getEventsNewer(eventId: Long) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getEventParticipants(eventId: Long) {
-        TODO("Not yet implemented")
+        try {
+            val response = with(apiService) {
+                if (event.likedByMe) ::dislikeEvent else ::likeEvent
+            }(event.id)
+            if (!response.isSuccessful) {
+                throw ApiError(response.code(), response.message())
+            }
+            val body = response.body() ?: throw ApiError(response.code(), response.message())
+            postDao.insertEvent(EventEntity.fromDto(body))
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
     }
 
     override suspend fun saveMedia(upload: MediaUpload): Media {
@@ -133,26 +142,6 @@ class RepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             throw UnknownError
         }
-    }
-
-    override suspend fun getJobs() {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun setJob(job: Job) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun removeJob(jobId: Long) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getMyWall() {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getMyWallNewer(postId: Long) {
-        TODO("Not yet implemented")
     }
 
     override suspend fun getPosts() {
@@ -191,10 +180,6 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getPost(postId: Long) {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun removePost(postId: Long) {
         try {
             val response = apiService.removePost(postId)
@@ -226,10 +211,6 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getPostsNewer(postId: Long) {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun getUsers() {
         try {
             val response = apiService.getUsers()
@@ -243,17 +224,5 @@ class RepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             throw UnknownError
         }
-    }
-
-    override suspend fun getUser(userId: Long) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getWall(authorId: Long) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getWallNewer(authorId: Long, postId: Long) {
-        TODO("Not yet implemented")
     }
 }
