@@ -46,7 +46,7 @@ data class EventEntity(
         participatedByMe = participatedByMe,
         attachment = attachment,
         link = link,
-        ownerByMe = ownerByMe,
+        ownedByMe = ownerByMe,
         users = users,
 
         likes = likeOwnerIds.size.toLong(),
@@ -72,7 +72,7 @@ data class EventEntity(
                     participatedByMe = participatedByMe,
                     attachment = attachment,
                     link = link,
-                    ownerByMe = ownerByMe,
+                    ownerByMe = ownedByMe,
                     users = users,
                 )
             }

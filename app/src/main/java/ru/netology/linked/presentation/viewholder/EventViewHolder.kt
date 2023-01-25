@@ -39,7 +39,7 @@ class EventViewHolder(
             } else {
                 avatarImageView.setImageResource(R.drawable.posts_avatars)
             }
-            menuButton.visibility = if (event.ownerByMe) View.VISIBLE else View.GONE
+            menuButton.visibility = if (event.ownedByMe) View.VISIBLE else View.GONE
 
             if (event.attachment == null) {
                 mediaImageView.setImageResource(0)
@@ -65,6 +65,8 @@ class EventViewHolder(
             likesButton.setOnClickListener { onInteractionListener.onLike(event) }
             menuButton.setOnClickListener { setupPopupMenu(it, event) }
         }
+
+
     }
 
     private fun setupPopupMenu(view: View, event: Event) {

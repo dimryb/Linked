@@ -10,7 +10,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.netology.linked.domain.Repository
 import ru.netology.linked.domain.dto.*
@@ -41,7 +40,7 @@ private val emptyEvent = Event(
     type = EventType.OFFLINE,
     likedByMe = false,
     participatedByMe = false,
-    ownerByMe = false,
+    ownedByMe = false,
     users = emptyMap(),
 )
 
@@ -50,7 +49,7 @@ private val noPhoto = PhotoModel()
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val repository: Repository,
-    private val appAuth: AppAuth,
+    appAuth: AppAuth,
 ) : ViewModel() {
 
     private val cachedPosts = repository
