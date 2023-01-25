@@ -238,7 +238,7 @@ class MainViewModel @Inject constructor(
                 }
             }
         }
-        editedPost.value = emptyPost
+        editedEvent.value = emptyEvent
         _photo.value = noPhoto
     }
 

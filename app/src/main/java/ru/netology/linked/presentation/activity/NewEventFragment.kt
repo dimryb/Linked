@@ -9,7 +9,6 @@ import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import com.github.dhaval2404.imagepicker.ImagePicker
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.linked.R
@@ -81,7 +80,7 @@ class NewEventFragment : Fragment() {
 
     private fun observeViewModel() {
         viewModel.eventCreated.observe(viewLifecycleOwner) {
-            findNavController().navigateUp()
+            viewModel.navigationUp()
         }
 
         viewModel.photo.observe(viewLifecycleOwner) {
