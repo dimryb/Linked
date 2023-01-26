@@ -9,6 +9,7 @@ import ru.netology.linked.domain.dto.AttachmentType
 import ru.netology.linked.domain.dto.Post
 import ru.netology.linked.presentation.view.loadAuthorAvatar
 import ru.netology.linked.presentation.view.loadImageMedia
+import ru.netology.linked.util.DateTimeUtils
 
 class PostViewHolder(
     private val binding: CardPostBinding,
@@ -23,7 +24,7 @@ class PostViewHolder(
     private fun setContent(post: Post) {
         binding.apply {
             authorTextView.text = post.author
-            publishedTextView.text = post.published
+            publishedTextView.text = DateTimeUtils.convertForUser(post.published)
             postTextView.text = post.content
             likesButton.text = post.likes.toString()
             likesButton.isChecked = post.likedByMe

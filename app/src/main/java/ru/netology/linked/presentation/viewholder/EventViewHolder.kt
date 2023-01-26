@@ -10,6 +10,7 @@ import ru.netology.linked.domain.dto.Event
 import ru.netology.linked.domain.dto.EventType
 import ru.netology.linked.presentation.view.loadAuthorAvatar
 import ru.netology.linked.presentation.view.loadImageMedia
+import ru.netology.linked.util.DateTimeUtils
 
 class EventViewHolder(
     private val binding: CardEventBinding,
@@ -24,7 +25,7 @@ class EventViewHolder(
     private fun setContent(event: Event) {
         binding.apply {
             authorTextView.text = event.author
-            publishedTextView.text = event.published
+            publishedTextView.text = DateTimeUtils.convertForUser(event.published)
             postTextView.text = event.content
             likesButton.text = event.likes.toString()
             likesButton.isChecked = event.likedByMe
