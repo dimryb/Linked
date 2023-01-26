@@ -1,7 +1,12 @@
 package ru.netology.linked.presentation.viewholder
 
+import android.content.Intent
+import android.net.Uri
+import android.opengl.Visibility
 import android.view.View
+import android.webkit.URLUtil
 import android.widget.PopupMenu
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.linked.R
 import ru.netology.linked.databinding.CardEventBinding
@@ -58,6 +63,11 @@ class EventViewHolder(
                     else -> {}
                 }
             }
+
+            link.visibility = if (event.link == null) View.GONE else View.VISIBLE
+            if (event.link != null) {
+                link.text = event.link
+            }
         }
     }
 
@@ -67,7 +77,12 @@ class EventViewHolder(
             menuButton.setOnClickListener { setupPopupMenu(it, event) }
         }
 
-
+        binding.link.setOnClickListener {
+            if (URLUtil.isValidUrl(event.link)) {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(event.link))
+                startActivity(binding.link.context, intent, null)
+            }
+        }
     }
 
     private fun setupPopupMenu(view: View, event: Event) {

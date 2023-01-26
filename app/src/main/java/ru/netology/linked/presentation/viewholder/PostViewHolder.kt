@@ -1,7 +1,11 @@
 package ru.netology.linked.presentation.viewholder
 
+import android.content.Intent
+import android.net.Uri
 import android.view.View
+import android.webkit.URLUtil
 import android.widget.PopupMenu
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.linked.R
 import ru.netology.linked.databinding.CardPostBinding
@@ -52,6 +56,11 @@ class PostViewHolder(
                     else -> {}
                 }
             }
+
+            link.visibility = if (post.link == null) View.GONE else View.VISIBLE
+            if (post.link != null) {
+                link.text = post.link
+            }
         }
     }
 
@@ -59,6 +68,13 @@ class PostViewHolder(
         binding.apply {
             likesButton.setOnClickListener { onInteractionListener.onLike(post) }
             menuButton.setOnClickListener { setupPopupMenu(it, post) }
+        }
+
+        binding.link.setOnClickListener {
+            if (URLUtil.isValidUrl(post.link)) {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.link))
+                ContextCompat.startActivity(binding.link.context, intent, null)
+            }
         }
     }
 

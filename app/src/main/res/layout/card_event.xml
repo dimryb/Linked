@@ -105,18 +105,45 @@
         android:layout_margin="@dimen/common_spacing"
         android:lineSpacingExtra="6dp"
         android:textColor="?attr/colorControlNormal"
-        app:layout_constraintBottom_toTopOf="@id/media"
+        app:layout_constraintBottom_toTopOf="@id/content_barrier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/headerTitleBarrier"
         tools:text="@sample/posts.json/data/content" />
 
     <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/content_barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="postTextView"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="80dp" />
+
+    <TextView
+        android:id="@+id/link"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/common_spacing"
+        android:layout_marginBottom="@dimen/common_spacing"
+        android:lineSpacingExtra="6dp"
+        android:textColor="?attr/colorAccent"
+        android:clickable="true"
+        android:visibility="visible"
+        android:ellipsize="end"
+        android:singleLine="true"
+        app:layout_constraintBottom_toTopOf="@id/media"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/content_barrier"
+        tools:text="link"/>
+
+    <androidx.constraintlayout.widget.Barrier
         android:id="@+id/bottomBarrier"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="postTextView" />
+        app:constraint_referenced_ids="link" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/likesButton"
@@ -140,7 +167,7 @@
         app:layout_constraintBottom_toTopOf="@id/bottomBarrier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/postTextView">
+        app:layout_constraintTop_toBottomOf="@id/link">
 
         <ImageView
             android:id="@+id/mediaImageView"
