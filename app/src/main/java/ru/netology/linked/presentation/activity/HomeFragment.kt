@@ -52,6 +52,8 @@ class HomeFragment : Fragment() {
         setupListeners()
         menuNavigation()
 
+        binding.panelMenuBottom.homeButton.isChecked = true
+
         return binding.root
     }
 
