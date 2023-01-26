@@ -6,7 +6,7 @@ enum class MenuChecked {
     EVENTS,
 }
 
-enum class MenuAction{
+enum class MenuAction {
     IDLE,
     HOME,
     USERS,

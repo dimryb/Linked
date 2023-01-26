@@ -24,7 +24,7 @@
         android:id="@+id/newPostFragment"
         android:name="ru.netology.linked.presentation.activity.NewPostFragment"
         android:label="fragment_new_post"
-        tools:layout="@layout/fragment_new_post" >
+        tools:layout="@layout/fragment_new_post">
         <argument
             android:name="content"
             app:argType="string" />
@@ -42,12 +42,12 @@
         android:id="@+id/signUpFragment"
         android:name="ru.netology.linked.presentation.activity.SignUpFragment"
         android:label="SignUpFragment"
-        tools:layout="@layout/fragment_sign_up"/>
+        tools:layout="@layout/fragment_sign_up" />
     <fragment
         android:id="@+id/signInFragment"
         android:name="ru.netology.linked.presentation.activity.SignInFragment"
         android:label="SignInFragment"
-        tools:layout="@layout/fragment_sign_in"/>
+        tools:layout="@layout/fragment_sign_in" />
     <fragment
         android:id="@+id/newEventFragment"
         android:name="ru.netology.linked.presentation.activity.NewEventFragment"
@@ -57,6 +57,6 @@
         android:id="@+id/usersFragment"
         android:name="ru.netology.linked.presentation.activity.UsersFragment"
         android:label="UsersFragment"
-        tools:layout="@layout/fragment_users"/>
+        tools:layout="@layout/fragment_users" />
 
 </navigation>

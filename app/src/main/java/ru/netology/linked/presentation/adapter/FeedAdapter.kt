@@ -11,8 +11,8 @@ import ru.netology.linked.domain.dto.Event
 import ru.netology.linked.domain.dto.FeedItem
 import ru.netology.linked.domain.dto.Post
 import ru.netology.linked.presentation.viewholder.EventViewHolder
-import ru.netology.linked.presentation.viewholder.PostViewHolder
 import ru.netology.linked.presentation.viewholder.OnInteractionListener
+import ru.netology.linked.presentation.viewholder.PostViewHolder
 
 class FeedAdapter(
     private val postOnInteractionListener: OnInteractionListener<Post>,

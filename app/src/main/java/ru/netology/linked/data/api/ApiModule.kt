@@ -11,7 +11,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 import ru.netology.linked.BuildConfig
 import ru.netology.linked.presentation.auth.AppAuth
-import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)

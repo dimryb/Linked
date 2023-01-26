@@ -1,7 +1,12 @@
 package ru.netology.linked.data.entity
 
-import androidx.room.*
-import ru.netology.linked.domain.dto.*
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import ru.netology.linked.domain.dto.Attachment
+import ru.netology.linked.domain.dto.Coordinates
+import ru.netology.linked.domain.dto.Post
+import ru.netology.linked.domain.dto.UserPreview
 
 @Entity
 data class PostEntity(

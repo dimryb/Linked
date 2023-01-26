@@ -66,9 +66,9 @@ class RepositoryImpl @Inject constructor(
         try {
             val response = apiService.getEvents()
             if (!response.isSuccessful) {
-                throw ApiError(response.code(), response.message())
+                throw ApiError(response.message())
             }
-            val body = response.body() ?: throw ApiError(response.code(), response.message())
+            val body = response.body() ?: throw ApiError(response.message())
             val events = body.toEntity()
             postDao.insertEvents(events)
         } catch (e: IOException) {
@@ -87,10 +87,10 @@ class RepositoryImpl @Inject constructor(
             }
             val response = apiService.setEvent((eventWithAttachment ?: event).toCreate())
             if (!response.isSuccessful) {
-                throw ApiError(response.code(), response.message())
+                throw ApiError(response.message())
             }
 
-            val body = response.body() ?: throw ApiError(response.code(), response.message())
+            val body = response.body() ?: throw ApiError(response.message())
             postDao.insertEvent(EventEntity.fromDto(body))
         } catch (e: IOException) {
             throw NetworkError
@@ -103,7 +103,7 @@ class RepositoryImpl @Inject constructor(
         try {
             val response = apiService.removeEvent(eventId)
             if (!response.isSuccessful) {
-                throw ApiError(response.code(), response.message())
+                throw ApiError(response.message())
             }
             postDao.removeEvent(eventId)
         } catch (e: IOException) {
@@ -119,9 +119,9 @@ class RepositoryImpl @Inject constructor(
                 if (event.likedByMe) ::dislikeEvent else ::likeEvent
             }(event.id)
             if (!response.isSuccessful) {
-                throw ApiError(response.code(), response.message())
+                throw ApiError(response.message())
             }
-            val body = response.body() ?: throw ApiError(response.code(), response.message())
+            val body = response.body() ?: throw ApiError(response.message())
             postDao.insertEvent(EventEntity.fromDto(body))
         } catch (e: IOException) {
             throw NetworkError
@@ -136,7 +136,7 @@ class RepositoryImpl @Inject constructor(
                 "file", upload.file.name, upload.file.asRequestBody()
             )
             val response = apiService.saveMedia(part)
-            return response.body() ?: throw ApiError(response.code(), response.message())
+            return response.body() ?: throw ApiError(response.message())
         } catch (e: IOException) {
             throw NetworkError
         } catch (e: Exception) {
@@ -148,9 +148,9 @@ class RepositoryImpl @Inject constructor(
         try {
             val response = apiService.getPosts()
             if (!response.isSuccessful) {
-                throw ApiError(response.code(), response.message())
+                throw ApiError(response.message())
             }
-            val body = response.body() ?: throw ApiError(response.code(), response.message())
+            val body = response.body() ?: throw ApiError(response.message())
             postDao.insertPosts(body.toEntity())
         } catch (e: IOException) {
             throw NetworkError
@@ -168,10 +168,10 @@ class RepositoryImpl @Inject constructor(
             }
             val response = apiService.setPost(postWithAttachment ?: post)
             if (!response.isSuccessful) {
-                throw ApiError(response.code(), response.message())
+                throw ApiError(response.message())
             }
 
-            val body = response.body() ?: throw ApiError(response.code(), response.message())
+            val body = response.body() ?: throw ApiError(response.message())
             postDao.insertPost(PostEntity.fromDto(body))
         } catch (e: IOException) {
             throw NetworkError
@@ -184,7 +184,7 @@ class RepositoryImpl @Inject constructor(
         try {
             val response = apiService.removePost(postId)
             if (!response.isSuccessful) {
-                throw ApiError(response.code(), response.message())
+                throw ApiError(response.message())
             }
             postDao.removePost(postId)
         } catch (e: IOException) {
@@ -200,9 +200,9 @@ class RepositoryImpl @Inject constructor(
                 if (post.likedByMe) ::dislikePost else ::likePost
             }(post.id)
             if (!response.isSuccessful) {
-                throw ApiError(response.code(), response.message())
+                throw ApiError(response.message())
             }
-            val body = response.body() ?: throw ApiError(response.code(), response.message())
+            val body = response.body() ?: throw ApiError(response.message())
             postDao.insertPost(PostEntity.fromDto(body))
         } catch (e: IOException) {
             throw NetworkError
@@ -215,9 +215,9 @@ class RepositoryImpl @Inject constructor(
         try {
             val response = apiService.getUsers()
             if (!response.isSuccessful) {
-                throw ApiError(response.code(), response.message())
+                throw ApiError(response.message())
             }
-            val body = response.body() ?: throw ApiError(response.code(), response.message())
+            val body = response.body() ?: throw ApiError(response.message())
             postDao.insertUsers(body.toEntity())
         } catch (e: IOException) {
             throw NetworkError

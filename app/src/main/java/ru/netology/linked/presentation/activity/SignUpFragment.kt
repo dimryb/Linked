@@ -10,8 +10,8 @@ import androidx.fragment.app.activityViewModels
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.linked.R
 import ru.netology.linked.databinding.FragmentSignUpBinding
-import ru.netology.linked.presentation.viewmodel.AuthViewModel
 import ru.netology.linked.presentation.viewmodel.AuthErrorType
+import ru.netology.linked.presentation.viewmodel.AuthViewModel
 
 @AndroidEntryPoint
 class SignUpFragment : Fragment() {

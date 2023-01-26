@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -23,12 +22,12 @@
 
             <EditText
                 android:id="@+id/contentEditText"
-                tools:text="@tools:sample/lorem[40]"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:inputType="textMultiLine"
-                android:padding="@dimen/common_spacing" />
+                android:padding="@dimen/common_spacing"
+                tools:text="@tools:sample/lorem[40]" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/online_switch"
@@ -40,18 +39,18 @@
 
             <FrameLayout
                 android:id="@+id/photoLayout"
-                android:visibility="gone"
-                tools:visibility="visible"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <ImageView
                     android:id="@+id/photo"
-                    tools:srcCompat="@tools:sample/avatars[15]"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:contentDescription="@string/description_photo" />
+                    android:contentDescription="@string/description_photo"
+                    tools:srcCompat="@tools:sample/avatars[15]" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/removePhoto"
@@ -78,8 +77,8 @@
         android:id="@+id/buttonPanel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:background="@android:color/white"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">

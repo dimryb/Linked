@@ -55,12 +55,12 @@
         android:layout_marginStart="@dimen/common_spacing"
         android:ellipsize="end"
         android:singleLine="true"
-        android:textColor="?attr/colorControlNormal"
         android:text="@string/event_label"
+        android:textColor="?attr/colorControlNormal"
         app:layout_constraintBottom_toBottomOf="@+id/avatarImageView"
         app:layout_constraintStart_toEndOf="@id/avatarImageView"
         app:layout_constraintTop_toBottomOf="@+id/publishedTextView"
-        app:layout_constraintVertical_bias="0.0"/>
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/eventType"
@@ -105,10 +105,10 @@
         android:layout_margin="@dimen/common_spacing"
         android:lineSpacingExtra="6dp"
         android:textColor="?attr/colorControlNormal"
+        app:layout_constraintBottom_toTopOf="@id/media"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/headerTitleBarrier"
-        app:layout_constraintBottom_toTopOf="@id/media"
         tools:text="@sample/posts.json/data/content" />
 
     <androidx.constraintlayout.widget.Barrier
@@ -134,9 +134,9 @@
         android:id="@+id/media"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:clickable="true"
         android:focusable="true"
+        android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@id/bottomBarrier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -155,8 +155,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="parent"
             app:srcCompat="@mipmap/media"
-            tools:visibility="visible"
-            tools:srcCompat="@mipmap/media" />
+            tools:srcCompat="@mipmap/media"
+            tools:visibility="visible" />
 
     </LinearLayout>
 

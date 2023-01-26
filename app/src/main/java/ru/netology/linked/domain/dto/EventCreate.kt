@@ -1,7 +1,5 @@
 package ru.netology.linked.domain.dto
 
-import ru.netology.linked.data.entity.EventEntity
-
 data class EventCreate(
     val id: Long,
     val content: String,

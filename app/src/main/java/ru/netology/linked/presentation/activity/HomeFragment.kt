@@ -56,9 +56,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-//        viewModel.data.observe(viewLifecycleOwner) { feedModel ->
-//            adapter.submitList(feedModel.posts)
-//        }
 
         lifecycleScope.launchWhenCreated {
             viewModel.data.collectLatest {
@@ -87,7 +84,7 @@ class HomeFragment : Fragment() {
         viewModel.menuChecked.observe(viewLifecycleOwner) { checked ->
             with(binding.panelMenuBottom) {
                 homeButton.isChecked = (checked == MenuChecked.HOME)
-                usersButton.isChecked = (checked== MenuChecked.USERS)
+                usersButton.isChecked = (checked == MenuChecked.USERS)
                 eventsButton.isChecked = (checked == MenuChecked.EVENTS)
             }
         }
@@ -115,9 +112,9 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun menuNavigation(){
-        viewModel.menuAction.observe(viewLifecycleOwner){ action->
-            when(action){
+    private fun menuNavigation() {
+        viewModel.menuAction.observe(viewLifecycleOwner) { action ->
+            when (action) {
                 MenuAction.HOME -> {
 
                 }

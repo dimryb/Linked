@@ -40,11 +40,10 @@ class PostRemoteMediator(
             }
 
             if (!response.isSuccessful) {
-                throw ApiError(response.code(), response.message())
+                throw ApiError(response.message())
             }
 
             val body = response.body() ?: throw ApiError(
-                response.code(),
                 response.message()
             )
 
