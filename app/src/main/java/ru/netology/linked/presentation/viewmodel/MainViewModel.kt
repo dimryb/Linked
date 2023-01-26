@@ -6,6 +6,7 @@ import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
@@ -16,7 +17,7 @@ import ru.netology.linked.presentation.auth.AppAuth
 import ru.netology.linked.presentation.util.SingleLiveEvent
 import javax.inject.Inject
 
-private val empty = Post(
+private val emptyPost = Post(
     id = 0,
     content = "",
     author = "",
@@ -26,7 +27,21 @@ private val empty = Post(
     published = "",
     mentionedMe = false,
     ownedByMe = false,
-    users = Users(user = UserPreview(name = "")),
+    users = emptyMap(),
+)
+
+private val emptyEvent = Event(
+    id = 0,
+    authorId = 0,
+    author = "",
+    content = "",
+    datetime = "",
+    published = "",
+    type = EventType.OFFLINE,
+    likedByMe = false,
+    participatedByMe = false,
+    ownedByMe = false,
+    users = emptyMap(),
 )
 
 private val noPhoto = PhotoModel()
@@ -34,24 +49,20 @@ private val noPhoto = PhotoModel()
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val repository: Repository,
-    private val appAuth: AppAuth,
+    appAuth: AppAuth,
 ) : ViewModel() {
 
-    private val cachedPosts = repository
-        .data
-        .cachedIn(viewModelScope)
+    private val cachedPosts = repository.data.cachedIn(viewModelScope)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val data: Flow<PagingData<FeedItem>> = appAuth.authStateFlow
-        .flatMapLatest { cachedPosts }
+    val data: Flow<PagingData<FeedItem>> = appAuth.authStateFlow.flatMapLatest { cachedPosts }
 
-    private val cachedEvents = repository
-        .eventsDataPagingFlow
-        .cachedIn(viewModelScope)
+    private val cachedEvents = repository.eventsDataPagingFlow.cachedIn(viewModelScope)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val dataEvens: Flow<PagingData<FeedItem>> = appAuth.authStateFlow
-        .flatMapLatest { cachedEvents }
+    val dataEvens: Flow<PagingData<FeedItem>> = appAuth.authStateFlow.flatMapLatest { cachedEvents }
+
+    val usersData: LiveData<List<User>> = repository.usersDataFlow.asLiveData(Dispatchers.Default)
 
     private val _state = MutableLiveData<FeedModelState>()
     val state: LiveData<FeedModelState>
@@ -65,14 +76,21 @@ class MainViewModel @Inject constructor(
     val menuAction: LiveData<MenuAction>
         get() = _menuAction
 
-    val edited = MutableLiveData(empty)
+    val editedPost = MutableLiveData(emptyPost)
     private val _postCreated = SingleLiveEvent<Unit>()
     val postCreated: LiveData<Unit>
         get() = _postCreated
 
+    val editedEvent = MutableLiveData(emptyEvent)
+    private val _eventCreated = SingleLiveEvent<Unit>()
+    val eventCreated: LiveData<Unit>
+        get() = _eventCreated
+
     private val _photo = MutableLiveData<PhotoModel?>(null)
     val photo: LiveData<PhotoModel?>
         get() = _photo
+
+    var isEditedFragment = false
 
     init {
         getPosts()
@@ -126,7 +144,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun savePost() {
-        edited.value?.let { post ->
+        editedPost.value?.let { post ->
             viewModelScope.launch {
                 _postCreated.value = Unit
                 try {
@@ -137,22 +155,22 @@ class MainViewModel @Inject constructor(
                 }
             }
         }
-        edited.value = empty
+        editedPost.value = emptyPost
         _photo.value = noPhoto
     }
 
     fun editPost(post: Post) {
-        edited.value = post
+        editedPost.value = post
     }
 
-    fun editContent(content: String) {
-        val value = edited.value
+    fun editPostContent(content: String) {
+        val value = editedPost.value
         value?.let {
             val text = content.trim()
             if (it.content == text) {
                 return
             }
-            edited.value = it.copy(content = text)
+            editedPost.value = it.copy(content = text)
         }
     }
 
@@ -190,6 +208,89 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    //events
+
+    fun getEvents() {
+        viewModelScope.launch {
+            _eventCreated.value = Unit
+            try {
+                repository.getEvents()
+                _state.value = FeedModelState.Idle
+            } catch (e: Exception) {
+                _state.value = FeedModelState.Error
+            }
+        }
+    }
+
+    fun saveEvent() {
+        editedEvent.value?.let { event ->
+            viewModelScope.launch {
+                _eventCreated.value = Unit
+                try {
+                    repository.setEvent(event, _photo.value?.uri?.let { MediaUpload(it.toFile()) })
+                    _state.value = FeedModelState.Idle
+                } catch (e: Exception) {
+                    _state.value = FeedModelState.Error
+                }
+            }
+        }
+        editedEvent.value = emptyEvent
+        _photo.value = noPhoto
+    }
+
+    fun editEvent(event: Event) {
+        editedEvent.value = event
+    }
+
+    fun editEventContent(content: String, dateTime: String, online: Boolean) {
+        val value = editedEvent.value
+        value?.let {
+            val text = content.trim()
+            val type = if (online) EventType.ONLINE else EventType.OFFLINE
+            if ((it.content == text) && (it.type == type) && (it.datetime == dateTime)) {
+                return
+            }
+            editedEvent.value = it.copy(
+                content = text, datetime = dateTime, type = type
+            )
+        }
+    }
+
+    fun removeEventById(eventId: Long) {
+        viewModelScope.launch {
+            try {
+                repository.removeEvent(eventId)
+                _state.value = FeedModelState.Idle
+            } catch (e: Exception) {
+                _state.value = FeedModelState.Error
+            }
+        }
+    }
+
+    fun refreshEvent() {
+        viewModelScope.launch {
+            _state.value = FeedModelState.Refresh
+            try {
+                repository.getPosts()
+                _state.value = FeedModelState.Idle
+            } catch (e: Exception) {
+                _state.value = FeedModelState.Error
+            }
+        }
+    }
+
+    fun likeEvent(event: Event) {
+        viewModelScope.launch {
+            try {
+                repository.likeEvent(event)
+                _state.value = FeedModelState.Idle
+            } catch (e: Exception) {
+                _state.value = FeedModelState.Error
+            }
+        }
+    }
+
+    // user
     fun getUsers() {
         viewModelScope.launch {
             _postCreated.value = Unit
@@ -202,28 +303,16 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun getEvents() {
+    fun refreshUsers() {
         viewModelScope.launch {
-            _postCreated.value = Unit
+            _state.value = FeedModelState.Refresh
             try {
-                repository.getEvents()
+                repository.getUsers()
                 _state.value = FeedModelState.Idle
             } catch (e: Exception) {
                 _state.value = FeedModelState.Error
             }
         }
-    }
-
-    fun editEvent(event: Event) {
-
-    }
-
-    fun removeEventById(id: Long) {
-
-    }
-
-    fun likeEvent(event: Event) {
-
     }
 
     fun changePhoto(uri: Uri?) {

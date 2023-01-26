@@ -1,7 +1,11 @@
 package ru.netology.linked.presentation.viewholder
 
+import android.content.Intent
+import android.net.Uri
 import android.view.View
+import android.webkit.URLUtil
 import android.widget.PopupMenu
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.linked.R
 import ru.netology.linked.databinding.CardPostBinding
@@ -9,6 +13,7 @@ import ru.netology.linked.domain.dto.AttachmentType
 import ru.netology.linked.domain.dto.Post
 import ru.netology.linked.presentation.view.loadAuthorAvatar
 import ru.netology.linked.presentation.view.loadImageMedia
+import ru.netology.linked.util.DateTimeUtils
 
 class PostViewHolder(
     private val binding: CardPostBinding,
@@ -23,7 +28,7 @@ class PostViewHolder(
     private fun setContent(post: Post) {
         binding.apply {
             authorTextView.text = post.author
-            publishedTextView.text = post.published
+            publishedTextView.text = DateTimeUtils.convertForUser(post.published)
             postTextView.text = post.content
             likesButton.text = post.likes.toString()
             likesButton.isChecked = post.likedByMe
@@ -51,6 +56,11 @@ class PostViewHolder(
                     else -> {}
                 }
             }
+
+            link.visibility = if (post.link == null) View.GONE else View.VISIBLE
+            if (post.link != null) {
+                link.text = post.link
+            }
         }
     }
 
@@ -58,6 +68,13 @@ class PostViewHolder(
         binding.apply {
             likesButton.setOnClickListener { onInteractionListener.onLike(post) }
             menuButton.setOnClickListener { setupPopupMenu(it, post) }
+        }
+
+        binding.link.setOnClickListener {
+            if (URLUtil.isValidUrl(post.link)) {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.link))
+                ContextCompat.startActivity(binding.link.context, intent, null)
+            }
         }
     }
 

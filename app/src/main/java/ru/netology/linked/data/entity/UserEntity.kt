@@ -11,7 +11,7 @@ data class UserEntity(
     val login: String,
     val name: String,
     val avatar: String? = null,
-){
+) {
     fun toDto(): User = User(
         id = id,
         login = login,
@@ -20,7 +20,7 @@ data class UserEntity(
     )
 
     companion object {
-        fun fromDto(user: User): UserEntity = with(user){
+        fun fromDto(user: User): UserEntity = with(user) {
             return UserEntity(
                 id = id,
                 login = login,

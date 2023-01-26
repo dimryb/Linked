@@ -9,23 +9,23 @@ class EventOnInteractionListener(
     private val authViewModel: AuthViewModel,
     private val mainViewModel: MainViewModel,
 ) : OnInteractionListener<Event> {
-    override fun onLike(event: Event) {
+    override fun onLike(value: Event) {
         if (authViewModel.authorized) {
-            mainViewModel.likeEvent(event)
+            mainViewModel.likeEvent(value)
         } else {
             authViewModel.signIn()
         }
     }
 
-    override fun onDetails(event: Event) {
+    override fun onDetails(value: Event) {
 
     }
 
-    override fun onEdit(event: Event) {
-        mainViewModel.editEvent(event)
+    override fun onEdit(value: Event) {
+        mainViewModel.editEvent(value)
     }
 
-    override fun onRemove(event: Event) {
-        mainViewModel.removeEventById(event.id)
+    override fun onRemove(value: Event) {
+        mainViewModel.removeEventById(value.id)
     }
 }

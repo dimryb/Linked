@@ -1,16 +1,15 @@
 package ru.netology.linked.presentation.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.linked.R
 import ru.netology.linked.presentation.auth.AppAuth
@@ -65,7 +64,12 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
                             true
                         }
                         R.id.logout -> {
-                            authViewModel.signOut()
+                            if (mainViewModel.isEditedFragment) {
+                                Toast.makeText(this@AppActivity, "Logout blocked", Toast.LENGTH_LONG)
+                                    .show()
+                            } else {
+                                authViewModel.signOut()
+                            }
                             true
                         }
                         else -> false
@@ -81,7 +85,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
     private fun authNavigation(navController: NavController) {
         authViewModel.token.observe(this) { token ->
             println("Token ${token.id} ${token.token}")
-            appAuth.setAuth(token.id, token.token ?: "")
+            appAuth.setAuth(token.id, token.token)
             navController.navigateUp()
         }
 
@@ -101,7 +105,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
                     navController.navigate(R.id.homeFragment)
                 }
                 MenuAction.USERS -> {
-
+                    navController.navigate(R.id.usersFragment)
                 }
                 MenuAction.EVENTS -> {
                     navController.navigate(R.id.eventsFragment)

@@ -9,23 +9,23 @@ class PostOnInteractionListener(
     private val authViewModel: AuthViewModel,
     private val mainViewModel: MainViewModel,
 ) : OnInteractionListener<Post> {
-    override fun onLike(post: Post) {
+    override fun onLike(value: Post) {
         if (authViewModel.authorized) {
-            mainViewModel.likePost(post)
+            mainViewModel.likePost(value)
         } else {
             authViewModel.signIn()
         }
     }
 
-    override fun onDetails(post: Post) {
+    override fun onDetails(value: Post) {
 
     }
 
-    override fun onEdit(post: Post) {
-        mainViewModel.editPost(post)
+    override fun onEdit(value: Post) {
+        mainViewModel.editPost(value)
     }
 
-    override fun onRemove(post: Post) {
-        mainViewModel.removePostById(post.id)
+    override fun onRemove(value: Post) {
+        mainViewModel.removePostById(value.id)
     }
 }

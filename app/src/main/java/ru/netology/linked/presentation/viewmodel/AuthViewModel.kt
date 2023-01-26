@@ -57,7 +57,10 @@ class AuthViewModel @Inject constructor(
         appAuth.removeAuth()
     }
 
-    private fun registrationError(type: AuthErrorType = AuthErrorType.UNKNOWN, message: String? = null) {
+    private fun registrationError(
+        type: AuthErrorType = AuthErrorType.UNKNOWN,
+        message: String? = null
+    ) {
         _registerErrorSignal.value = AuthError(type, message)
     }
 
@@ -95,7 +98,7 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun authentication(login: String, pass: String){
+    fun authentication(login: String, pass: String) {
         viewModelScope.launch {
             try {
                 _token.value = repository.authentication(Authentication(login, pass))

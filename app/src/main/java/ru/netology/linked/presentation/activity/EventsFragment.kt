@@ -14,10 +14,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import ru.netology.linked.R
 import ru.netology.linked.databinding.FragmentEventsBinding
-import ru.netology.linked.domain.dto.Post
+import ru.netology.linked.domain.dto.EventType
+import ru.netology.linked.presentation.activity.NewEventFragment.Companion.typeArg
 import ru.netology.linked.presentation.activity.NewPostFragment.Companion.textArg
 import ru.netology.linked.presentation.adapter.FeedAdapter
-import ru.netology.linked.presentation.viewholder.OnInteractionListener
 import ru.netology.linked.presentation.viewmodel.*
 
 @AndroidEntryPoint
@@ -58,21 +58,17 @@ class EventsFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-//        viewModel.data.observe(viewLifecycleOwner) { feedModel ->
-//            adapter.submitList(feedModel.posts)
-//        }
-
         lifecycleScope.launchWhenCreated {
             viewModel.dataEvens.collectLatest {
                 adapter.submitData(it)
             }
         }
 
-        viewModel.edited.observe(viewLifecycleOwner) { edited ->
+        viewModel.editedEvent.observe(viewLifecycleOwner) { edited ->
             if (edited.id == 0L) {
                 return@observe
             }
-            launchEditPost()
+            launchEditEvent()
         }
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
@@ -80,7 +76,7 @@ class EventsFragment : Fragment() {
             if (state is FeedModelState.Error) {
                 Snackbar.make(binding.root, "Error", Snackbar.LENGTH_LONG)
                     .setAction(R.string.retry_loading) {
-                        viewModel.refreshPost()
+                        viewModel.refreshEvent()
                     }.show()
             }
             binding.swipeRefresh.isRefreshing = state is FeedModelState.Refresh
@@ -98,7 +94,7 @@ class EventsFragment : Fragment() {
     private fun setupListeners() {
 
         binding.swipeRefresh.setOnRefreshListener {
-            viewModel.refreshPost()
+            viewModel.refreshEvent()
         }
 
         with(binding.panelMenuBottom) {
@@ -112,11 +108,7 @@ class EventsFragment : Fragment() {
                 viewModel.bottomMenuAction(MenuAction.EVENTS)
             }
             createPostButton.setOnClickListener {
-//                if (authViewModel.authorized) {
-//                    findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
-//                } else {
-//                    authViewModel.signIn()
-//                }
+                viewModel.bottomMenuAction(MenuAction.ADD)
             }
         }
     }
@@ -134,7 +126,12 @@ class EventsFragment : Fragment() {
 
                 }
                 MenuAction.ADD -> {
-
+                    if (authViewModel.authorized) {
+                        findNavController().navigate(R.id.action_eventsFragment_to_newEventFragment)
+                    } else {
+                        authViewModel.signIn()
+                    }
+                    viewModel.bottomMenuAction(MenuAction.IDLE)
                 }
                 else -> {}
             }
@@ -146,13 +143,14 @@ class EventsFragment : Fragment() {
         _binding = null
     }
 
-    private fun launchEditPost() {
+    private fun launchEditEvent() {
         findNavController()
             .navigate(
-                R.id.action_homeFragment_to_newPostFragment,
+                R.id.action_eventsFragment_to_newEventFragment,
                 Bundle().apply {
-                    viewModel.edited.value?.content.let {
-                        textArg = it
+                    viewModel.editedEvent.value?.let {
+                        textArg = it.content
+                        typeArg = (it.type == EventType.ONLINE)
                     }
                 }
             )

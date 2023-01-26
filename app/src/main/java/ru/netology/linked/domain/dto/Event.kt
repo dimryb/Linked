@@ -17,13 +17,10 @@ data class Event(
     val participatedByMe: Boolean,
     val attachment: Attachment? = null,
     val link: String? = null,
-    val ownerByMe: Boolean,
-    val users: Users,
+    val ownedByMe: Boolean,
+    val users: Map<Long, UserPreview>,
 
     val likes: Long = 0,
 ) : FeedItem() {
-    enum class EventType {
-        OFFLINE,
-        ONLINE,
-    }
+
 }

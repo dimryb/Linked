@@ -18,9 +18,9 @@ class AuthRepositoryImpl @Inject constructor(
         try {
             val response = apiService.authentication(authentication)
             if (!response.isSuccessful) {
-                throw ApiError(response.code(), response.message())
+                throw ApiError(response.message())
             }
-            return response.body() ?: throw ApiError(response.code(), response.message())
+            return response.body() ?: throw ApiError(response.message())
         } catch (e: IOException) {
             throw NetworkError
         } catch (e: ApiError) {
@@ -40,9 +40,9 @@ class AuthRepositoryImpl @Inject constructor(
         try {
             response = apiService.registration(login, password, name)
             if (!response.isSuccessful) {
-                throw ApiError(response.code(), response.message())
+                throw ApiError(response.message())
             }
-            return response.body() ?: throw ApiError(response.code(), response.message())
+            return response.body() ?: throw ApiError(response.message())
         } catch (e: IOException) {
             throw NetworkError
         } catch (e: ApiError) {

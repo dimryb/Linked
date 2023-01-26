@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.activity.NewPostFragment">
+    tools:context=".presentation.activity.NewEventFragment">
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -28,6 +28,14 @@
                 android:inputType="textMultiLine"
                 android:padding="@dimen/common_spacing"
                 tools:text="@tools:sample/lorem[40]" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/online_switch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/common_spacing"
+                android:text="@string/Online"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
 
             <FrameLayout
                 android:id="@+id/photoLayout"

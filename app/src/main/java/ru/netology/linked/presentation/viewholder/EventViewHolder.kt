@@ -1,14 +1,21 @@
 package ru.netology.linked.presentation.viewholder
 
+import android.content.Intent
+import android.net.Uri
+import android.opengl.Visibility
 import android.view.View
+import android.webkit.URLUtil
 import android.widget.PopupMenu
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.linked.R
 import ru.netology.linked.databinding.CardEventBinding
 import ru.netology.linked.domain.dto.AttachmentType
 import ru.netology.linked.domain.dto.Event
+import ru.netology.linked.domain.dto.EventType
 import ru.netology.linked.presentation.view.loadAuthorAvatar
 import ru.netology.linked.presentation.view.loadImageMedia
+import ru.netology.linked.util.DateTimeUtils
 
 class EventViewHolder(
     private val binding: CardEventBinding,
@@ -23,11 +30,11 @@ class EventViewHolder(
     private fun setContent(event: Event) {
         binding.apply {
             authorTextView.text = event.author
-            publishedTextView.text = event.published
+            publishedTextView.text = DateTimeUtils.convertForUser(event.published)
             postTextView.text = event.content
             likesButton.text = event.likes.toString()
             likesButton.isChecked = event.likedByMe
-            eventType.text = if (event.type == Event.EventType.OFFLINE) {
+            eventType.text = if (event.type == EventType.OFFLINE) {
                 binding.root.context.getString(R.string.Offline)
             } else {
                 binding.root.context.getString(R.string.Online)
@@ -38,7 +45,7 @@ class EventViewHolder(
             } else {
                 avatarImageView.setImageResource(R.drawable.posts_avatars)
             }
-            menuButton.visibility = if (event.ownerByMe) View.VISIBLE else View.GONE
+            menuButton.visibility = if (event.ownedByMe) View.VISIBLE else View.GONE
 
             if (event.attachment == null) {
                 mediaImageView.setImageResource(0)
@@ -56,6 +63,11 @@ class EventViewHolder(
                     else -> {}
                 }
             }
+
+            link.visibility = if (event.link == null) View.GONE else View.VISIBLE
+            if (event.link != null) {
+                link.text = event.link
+            }
         }
     }
 
@@ -63,6 +75,13 @@ class EventViewHolder(
         binding.apply {
             likesButton.setOnClickListener { onInteractionListener.onLike(event) }
             menuButton.setOnClickListener { setupPopupMenu(it, event) }
+        }
+
+        binding.link.setOnClickListener {
+            if (URLUtil.isValidUrl(event.link)) {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(event.link))
+                startActivity(binding.link.context, intent, null)
+            }
         }
     }
 

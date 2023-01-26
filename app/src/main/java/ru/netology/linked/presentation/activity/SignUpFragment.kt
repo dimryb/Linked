@@ -10,8 +10,8 @@ import androidx.fragment.app.activityViewModels
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.linked.R
 import ru.netology.linked.databinding.FragmentSignUpBinding
-import ru.netology.linked.presentation.viewmodel.AuthViewModel
 import ru.netology.linked.presentation.viewmodel.AuthErrorType
+import ru.netology.linked.presentation.viewmodel.AuthViewModel
 
 @AndroidEntryPoint
 class SignUpFragment : Fragment() {
@@ -55,7 +55,6 @@ class SignUpFragment : Fragment() {
                 AuthErrorType.LOGIN_IS_BLANK -> getString(R.string.login_is_blank)
                 AuthErrorType.PASSWORD_IS_BLANK -> getString(R.string.password_is_blank)
                 AuthErrorType.API_ERROR -> getString(R.string.api_error)
-                else -> getString(R.string.register_error)
             } + if (error.message == null) "" else ": " + error.message
             Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show()
         }

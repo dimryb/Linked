@@ -5,7 +5,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.load.resource.bitmap.FitCenter
-import ru.netology.linked.BuildConfig
 
 fun ImageView.load(url: String, vararg transforms: BitmapTransformation = emptyArray()) =
     Glide.with(this)

@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurface"
-    >
+    android:background="?attr/colorSurface">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,8 +19,8 @@
             android:id="@+id/field_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_sign_in"
             android:layout_marginStart="@dimen/margin_sign_in"
+            android:layout_marginBottom="@dimen/margin_sign_in"
             android:hint="@string/enter_name"
             android:inputType="text" />
 
@@ -31,8 +28,8 @@
             android:id="@+id/field_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_sign_in"
             android:layout_marginStart="@dimen/margin_sign_in"
+            android:layout_marginBottom="@dimen/margin_sign_in"
             android:hint="@string/enter_login"
             android:inputType="text" />
 
@@ -40,8 +37,8 @@
             android:id="@+id/field_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_sign_in"
             android:layout_marginStart="@dimen/margin_sign_in"
+            android:layout_marginBottom="@dimen/margin_sign_in"
             android:hint="@string/enter_password"
             android:inputType="textPassword" />
 
@@ -49,15 +46,15 @@
             android:id="@+id/field_repeat_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_sign_in"
             android:layout_marginStart="@dimen/margin_sign_in"
+            android:layout_marginBottom="@dimen/margin_sign_in"
             android:hint="@string/enter_repeat_password"
             android:inputType="textPassword" />
 
         <Button
             android:id="@+id/sign_up_button"
-            android:layout_width="@dimen/standard_field_width"
             style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="@dimen/standard_field_width"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/margin_button_sign_in"

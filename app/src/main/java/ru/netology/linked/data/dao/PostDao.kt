@@ -28,6 +28,15 @@ interface PostDao {
     @Insert(onConflict = REPLACE)
     suspend fun insertEvents(events: List<EventEntity>)
 
+    @Query("DELETE FROM EventEntity WHERE id = :id")
+    suspend fun removeEvent(id: Long)
+
+    @Query("UPDATE EventEntity SET content = :content WHERE id = :id")
+    suspend fun updateContentEventById(id: Long, content: String)
+
+    suspend fun setEventContent(event: EventEntity) =
+        if (event.id == 0L) insertEvent(event) else updateContentEventById(event.id, event.content)
+
     // posts
     @Query("SELECT * FROM PostEntity ORDER BY id DESC")
     fun getPosts(): Flow<List<PostEntity>>
@@ -51,6 +60,9 @@ interface PostDao {
         if (post.id == 0L) insertPost(post) else updateContentPostById(post.id, post.content)
 
     //users
+    @Query("SELECT * FROM UserEntity ORDER BY id DESC")
+    fun getUsers(): Flow<List<UserEntity>>
+
     @Insert(onConflict = REPLACE)
     suspend fun insertUser(user: UserEntity)
 

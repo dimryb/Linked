@@ -12,16 +12,18 @@ import androidx.fragment.app.activityViewModels
 import com.github.dhaval2404.imagepicker.ImagePicker
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.linked.R
-import ru.netology.linked.databinding.FragmentNewPostBinding
+import ru.netology.linked.databinding.FragmentNewEventBinding
 import ru.netology.linked.presentation.viewmodel.AuthViewModel
 import ru.netology.linked.presentation.viewmodel.MainViewModel
 import ru.netology.nmedia.util.AndroidUtils
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @AndroidEntryPoint
-class NewPostFragment : Fragment() {
-    private var _binding: FragmentNewPostBinding? = null
-    private val binding: FragmentNewPostBinding
-        get() = _binding ?: throw RuntimeException("FragmentNewPostBinding == null")
+class NewEventFragment : Fragment() {
+    private var _binding: FragmentNewEventBinding? = null
+    private val binding: FragmentNewEventBinding
+        get() = _binding ?: throw RuntimeException("FragmentNewEventBinding == null")
 
     private val viewModel: MainViewModel by activityViewModels()
     private val authViewModel: AuthViewModel by activityViewModels()
@@ -51,8 +53,14 @@ class NewPostFragment : Fragment() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean =
                 when (menuItem.itemId) {
                     R.id.save -> {
-                        viewModel.editPostContent(binding.contentEditText.text.toString())
-                        viewModel.savePost()
+                        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                        val datetime = LocalDateTime.now().format(formatter)
+                        viewModel.editEventContent(
+                            binding.contentEditText.text.toString(),
+                            datetime,
+                            binding.onlineSwitch.isChecked
+                        )
+                        viewModel.saveEvent()
                         AndroidUtils.hideKeyboard(requireView())
                         true
                     }
@@ -61,13 +69,11 @@ class NewPostFragment : Fragment() {
 
         }, viewLifecycleOwner)
 
-        _binding = FragmentNewPostBinding.inflate(
+        _binding = FragmentNewEventBinding.inflate(
             inflater,
             container,
             false
         )
-
-        arguments?.textArg?.let(binding.contentEditText::setText)
 
         viewModel.isEditedFragment = true
         setupClickListeners()
@@ -77,7 +83,10 @@ class NewPostFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.postCreated.observe(viewLifecycleOwner) {
+        arguments?.textArg?.let(binding.contentEditText::setText)
+        arguments?.typeArg?.let(binding.onlineSwitch::setChecked)
+
+        viewModel.eventCreated.observe(viewLifecycleOwner) {
             viewModel.navigationUp()
         }
 
@@ -118,5 +127,10 @@ class NewPostFragment : Fragment() {
         var Bundle.textArg: String?
             set(value) = putString(TEXT_KEY, value)
             get() = getString(TEXT_KEY)
+
+        private const val TYPE_KEY = "TYPE_KEY"
+        var Bundle.typeArg: Boolean?
+            set(value) = putBoolean(TYPE_KEY, value ?: false)
+            get() = getBoolean(TYPE_KEY)
     }
 }
